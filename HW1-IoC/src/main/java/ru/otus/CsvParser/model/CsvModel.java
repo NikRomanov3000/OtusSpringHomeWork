@@ -1,4 +1,4 @@
-package CsvParser.model;
+package ru.otus.CsvParser.model;
 
 import java.util.List;
 

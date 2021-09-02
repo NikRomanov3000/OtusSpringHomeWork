@@ -1,13 +1,13 @@
-package CsvParser.service;
+package ru.otus.CsvParser.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.opencsv.CSVReader;
 
-import CsvParser.model.Answer;
-import CsvParser.model.CsvModel;
-import CsvParser.model.Question;
+import ru.otus.CsvParser.model.Answer;
+import ru.otus.CsvParser.model.CsvModel;
+import ru.otus.CsvParser.model.Question;
 
 public class CsvParserService {
 

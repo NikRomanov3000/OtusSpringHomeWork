@@ -1,6 +1,5 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -8,13 +7,13 @@ import org.junit.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.Test;
 
-import CsvParser.model.CsvModel;
+import ru.otus.CsvParser.model.CsvModel;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
-import CsvParser.service.CsvParserService;
+import ru.otus.CsvParser.service.CsvParserService;
 
 @DisplayName("CsvParserService Test")
 public class CsvParserServiceTest {

@@ -1,10 +1,8 @@
-package CsvParser;
-
-import java.util.Locale;
+package ru.otus.CsvParser;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import CsvParser.service.CsvParserService;
+import ru.otus.CsvParser.service.CsvParserService;
 
 public class Main {
 

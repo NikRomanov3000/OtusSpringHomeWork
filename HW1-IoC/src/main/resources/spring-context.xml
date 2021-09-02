@@ -4,8 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+
     <bean id="fileReader" class="java.io.FileReader">
-        <constructor-arg name="fileName" value="HW1-IoC/src/main/resources/HW1-IoC.csv"/>
+        <constructor-arg name="fileName" value="C:\Users\Admin\Desktop\OtusSpringHomeWork\HW1-IoC\src\main\resources\HW1-IoC.csv"/>
     </bean>
 
     <bean id="rowValidatorAggregatorBean" class="com.opencsv.validators.RowValidatorAggregator"/>
@@ -42,7 +43,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="CsvParserService" class="CsvParser.service.CsvParserService">
+    <bean id="CsvParserService" class="ru.otus.CsvParser.service.CsvParserService">
         <constructor-arg name="csvReader" ref="csvReader"/>
     </bean>
 </beans>

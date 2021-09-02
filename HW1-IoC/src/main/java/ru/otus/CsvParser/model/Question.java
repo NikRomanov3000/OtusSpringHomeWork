@@ -1,4 +1,4 @@
-package CsvParser.model;
+package ru.otus.CsvParser.model;
 
 public class Question {
   private String question;
