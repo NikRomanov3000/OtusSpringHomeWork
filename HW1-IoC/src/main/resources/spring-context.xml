@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="fileReader" class="java.io.FileReader">
+        <constructor-arg name="fileName" value="C:\Users\Admin\Desktop\OtusSpringHomeWork\HW1-IoC\src\main\resources\HW1-IoC.csv"/>
+    </bean>
+
+    <bean id="rowValidatorAggregatorBean" class="com.opencsv.validators.RowValidatorAggregator"/>
+
+    <bean id="lineValidatorAggregatorBean" class="com.opencsv.validators.LineValidatorAggregator"/>
+
+    <bean id="LocaleBean" class="java.util.Locale">
+        <constructor-arg name="language" value="en"/>
+    </bean>
+
+    <bean id="csvParser" class="com.opencsv.CSVParser">
+        <constructor-arg name="separator" value=';'/>
+        <constructor-arg name="quotechar" value='"'/>
+        <constructor-arg name="escape" value='\'/>
+        <constructor-arg name="strictQuotes" value="false"/>
+        <constructor-arg name="ignoreLeadingWhiteSpace" value="true"/>
+        <constructor-arg name="ignoreQuotations" value="false"/>
+        <constructor-arg name="nullFieldIndicator" value="NEITHER"/>
+        <constructor-arg name="errorLocale" ref="LocaleBean"/>
+    </bean>
+
+    <bean id="csvReader" class="com.opencsv.CSVReader">
+        <constructor-arg name="reader" ref="fileReader"/>
+        <constructor-arg name="line" value="0"/>
+        <constructor-arg name="icsvParser" ref="csvParser"/>
+        <constructor-arg name="keepCR" value="false"/>
+        <constructor-arg name="verifyReader" value="true"/>
+        <constructor-arg name="multilineLimit" value="0"/>
+        <constructor-arg name="errorLocale" ref="LocaleBean"/>
+        <constructor-arg name="lineValidatorAggregator" ref="lineValidatorAggregatorBean"/>
+        <constructor-arg name="rowValidatorAggregator" ref="rowValidatorAggregatorBean"/>
+        <constructor-arg name="rowProcessor">
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="CsvParserService" class="ru.otus.CsvParser.service.CsvParserService">
+        <constructor-arg name="csvReader" ref="csvReader"/>
+    </bean>
+</beans>
