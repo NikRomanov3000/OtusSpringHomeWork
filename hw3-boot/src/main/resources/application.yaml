@@ -1,0 +1,6 @@
+quizapplication:
+  passingscore: 3
+  filepath: C:\Users\Admin\Desktop\OtusSpringHomeWork\hw3-boot\src\main\resources\HW1-IoC.csv
+spring:
+  banner:
+    location: banner/banner.txt
