@@ -2,6 +2,7 @@ package ru.otus.hw3boot.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,26 +18,31 @@ import ru.otus.hw3boot.model.RightAnswer;
 public class CsvParserService {
 
   private final CSVReader csvReader;
+  @Value("${quizapplication.numberOfQuestion}")
+  private Integer numberOfQuestion;
 
   public CsvParserService(CSVReader csvReader) {
     this.csvReader = csvReader;
   }
 
-  public List<Quiz> readCsvFile() {
+  public List<Quiz> readCsvFile(Locale userLocale) {
     String[] line;
     List<Quiz> models = new ArrayList<>();
+    Integer iter = initIterator(userLocale);
 
     try {
-      while ((line = csvReader.readNext()) != null) {
+      List<String[]> strings = csvReader.readAll();
+      for (int i = iter; i < iter + numberOfQuestion; i++) {
+        line = strings.get(i);
         Quiz model = new Quiz();
         Question question = new Question(line[0]);
         List<Answer> answerList = new ArrayList<>();
-        for (int i = 1; i < line.length; i++) {
-          if (line.length == i + 1) {
-            RightAnswer rightAnswer = new RightAnswer(Integer.valueOf(line[i]));
+        for (int j = 1; j < line.length; j++) {
+          if (line.length == j + 1) {
+            RightAnswer rightAnswer = new RightAnswer(Integer.valueOf(line[j]));
             model.setRightAnswer(rightAnswer);
           } else {
-            Answer answer = new Answer(line[i]);
+            Answer answer = new Answer(line[j]);
             answerList.add(answer);
           }
         }
@@ -49,5 +55,12 @@ public class CsvParserService {
     }
 
     return models;
+  }
+
+  private Integer initIterator(Locale userLocale) {
+    if (Locale.forLanguageTag("ru-RU").equals(userLocale)) {
+      return 5;
+    }
+    return 0;
   }
 }

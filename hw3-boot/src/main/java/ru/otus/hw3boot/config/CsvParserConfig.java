@@ -20,7 +20,7 @@ public class CsvParserConfig {
   public CSVReader csvReader() throws FileNotFoundException {
     CSVReader csvReader = new CSVReaderBuilder(new FileReader(getFilename())).withCSVParser(
         new CSVParserBuilder()
-            .withSeparator(';')
+            .withSeparator('\t')
             .build()).build();
     return csvReader;
   }

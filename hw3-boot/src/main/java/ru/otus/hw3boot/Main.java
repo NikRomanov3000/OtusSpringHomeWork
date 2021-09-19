@@ -1,5 +1,7 @@
 package ru.otus.hw3boot;
 
+import java.util.Locale;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +16,7 @@ public class Main {
 
     QuizService service = ctx.getBean(QuizService.class);
 
-    service.startQuiz();
+    //en-US; ru-RU
+    service.startQuiz(Locale.forLanguageTag("ru-RU"));
   }
 }

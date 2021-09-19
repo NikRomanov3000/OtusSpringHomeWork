@@ -1,5 +1,10 @@
-п»їDo you like what you see ?;Yes;No;I don't know;1
-Which processor is the best ?;AMD Ryzen;Intel Core;Elbrus;1
-Which JDM car is the best ?;Nissan Skyline GTR;Toyota Supra;Mazda RX-7;2
-Which Battle Royal is the best ?;Warzone;Apex;Fortnite;2
-Which programming language is the best ?;C++;Python;Java;3
+Do you like what you see ?	Yes	No	I don't know	1
+Which processor is the best ?	AMD Ryzen	Intel Core	Elbrus	1
+Which JDM car is the best ?	Nissan Skyline GTR	Toyota Supra	Mazda RX-7	2
+Which Battle Royal is the best ?	Warzone	Apex	Fortnite	2
+Which programming language is the best ?	C++	Python	Java	3
+Вам нравится то, что вы видете ?	Да	Нет	Не знаю	1
+Какой процессор лучший ?	AMD Ryzen	Intel Core	Эльбрус	1
+Лучший автомобиль JDM 	Nissan Skyline GTR	Toyota Supra	Mazda RX-7	2
+Выберите лучший Battle Royal	Warzone	Apex	Fortnite	2
+Выберите лучший язык программирования	C++	Python	Java	3
