@@ -1,6 +1,7 @@
 quizapplication:
+  locale: "en-US"
   passingscore: 3
-  filepath: C:\Users\Admin\Desktop\OtusSpringHomeWork\hw3-boot\src\main\resources\HW1-IoC.csv
+  filepath: /questions/questions_%s.csv
   numberOfQuestion: 5
 spring:
   banner:

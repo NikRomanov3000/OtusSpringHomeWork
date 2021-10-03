@@ -1,37 +1,24 @@
 package ru.otus.hw3boot.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Quiz {
-  private Question question;
-  private List<Answer> answers;
-  private RightAnswer rightAnswers;
+  private List<Question> questions;
 
-  public Question getQuestion() {
-    return question;
+  public List<Question> getQuestions() {
+    return questions;
   }
 
-  public void setQuestion(Question question) {
-    this.question = question;
+  public void setQuestions(List<Question> question) {
+    this.questions = question;
   }
 
-  public List<Answer> getAnswers() {
-    return answers;
-  }
-
-  public void setAnswers(List<Answer> answers) {
-    this.answers = answers;
-  }
-
-  public void addAnswerToList(Answer answer) {
-    answers.add(answer);
-  }
-
-  public RightAnswer getRightAnswer() {
-    return rightAnswers;
-  }
-
-  public void setRightAnswer(RightAnswer rightAnswers) {
-    this.rightAnswers = rightAnswers;
+  public void addQuestionToQuiz(Question question) {
+    if (Objects.isNull(questions)) {
+      questions = new ArrayList<>();
+    }
+    questions.add(question);
   }
 }
