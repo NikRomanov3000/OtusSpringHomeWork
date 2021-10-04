@@ -1,32 +1,34 @@
 package ru.otus.hw3boot.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 
-import ru.otus.hw3boot.config.beans.impl.CsvReaderWrapperImpl;
+import ru.otus.hw3boot.config.beans.CsvReaderWrapper;
 import ru.otus.hw3boot.model.Answer;
 import ru.otus.hw3boot.model.Quiz;
 import ru.otus.hw3boot.model.Question;
-import ru.otus.hw3boot.service.CsvParserService;
+import ru.otus.hw3boot.service.QuizDao;
 
-@Service
-public class CsvParserServiceImpl implements CsvParserService {
+@Repository
+public class QuizDaoImpl implements QuizDao {
 
-  private final CsvReaderWrapperImpl csvReaderWrapper;
-  private int numberOfQuestion;
+  private final CsvReaderWrapper csvReaderWrapper;
+  private final int numberOfQuestion;
 
-  public CsvParserServiceImpl(CsvReaderWrapperImpl csvReaderWrapper,
+  public QuizDaoImpl(CsvReaderWrapper csvReaderWrapper,
       @Value("${quizapplication.numberOfQuestion}") int numberOfQuestion) {
     this.csvReaderWrapper = csvReaderWrapper;
     this.numberOfQuestion = numberOfQuestion;
   }
 
   @Override
-  public Quiz readCsvFile() {
+  public Quiz readQuiz() throws IOException, CsvException {
     String[] line;
     Quiz quiz = new Quiz();
     CSVReader csvReader = csvReaderWrapper.getCsvReader();
@@ -45,13 +47,11 @@ public class CsvParserServiceImpl implements CsvParserService {
         }
         quiz.addQuestionToQuiz(question);
       }
+      csvReader.close();
     } catch (Exception exception) {
-      exception.printStackTrace();
+      throw exception;
     }
 
     return quiz;
   }
-
-  //заменить Iterator на поле loacle или 2 файла
-  //при чтении в DAO получать локаль и возвращать нужный файл
 }

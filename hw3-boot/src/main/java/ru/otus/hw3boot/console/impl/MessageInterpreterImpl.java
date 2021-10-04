@@ -1,27 +1,25 @@
 package ru.otus.hw3boot.console.impl;
 
-import java.util.Locale;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import ru.otus.hw3boot.config.beans.LocaleConfig;
 import ru.otus.hw3boot.console.MessageInterpreter;
 
 @Service
 public class MessageInterpreterImpl implements MessageInterpreter {
 
   private final MessageSource messageSource;
-  private final Locale userLocale;
+  private final LocaleConfig localeConfig;
 
   public MessageInterpreterImpl(MessageSource messageSource,
-      @Value("${quizapplication.locale}") String userLocale) {
+      LocaleConfig localeConfig) {
     this.messageSource = messageSource;
-    this.userLocale = Locale.forLanguageTag(userLocale);
+    this.localeConfig = localeConfig;
   }
 
   @Override
   public String getMessage(String stringKey) {
-    return messageSource.getMessage(stringKey, null, userLocale);
+    return messageSource.getMessage(stringKey, null, localeConfig.getLocale());
   }
 }

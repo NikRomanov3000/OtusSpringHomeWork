@@ -5,22 +5,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import ru.otus.hw3boot.config.beans.FilenameInitializator;
+import ru.otus.hw3boot.config.beans.LocaleConfig;
 
 @Component
 public class FilenameInitializatorImpl implements FilenameInitializator {
-  @Value("${quizapplication.filepath}")
-  private String filename;
-  @Value("${quizapplication.locale}")
-  private String localeCode;
+  private final String filename;
+  private final LocaleConfig localeConfig;
 
-  @Override
-  public String getFilename() {
-    return formatFileNameForLocale(filename, localeCode);
+  public FilenameInitializatorImpl(@Value("${quizapplication.filepath}") String filename,
+      LocaleConfig localeConfig) {
+    this.filename = filename;
+    this.localeConfig = localeConfig;
   }
 
   @Override
-  public String getFileLocaleCode() {
-    return localeCode;
+  public String getFilename() {
+    return formatFileNameForLocale(filename, localeConfig.getLocaleCode());
   }
 
   private String formatFileNameForLocale(String filename, String localeCode) {
@@ -28,13 +28,5 @@ public class FilenameInitializatorImpl implements FilenameInitializator {
       throw new RuntimeException("Empty filename or locale in property");
     }
     return String.format(filename, localeCode);
-  }
-
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-  public void setLocaleCode(String localeCode) {
-    this.localeCode = localeCode;
   }
 }

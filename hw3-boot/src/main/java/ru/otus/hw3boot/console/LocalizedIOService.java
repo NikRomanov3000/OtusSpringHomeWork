@@ -1,5 +1,5 @@
 package ru.otus.hw3boot.console;
 
-public interface ConsoleMessageFacade {
+public interface LocalizedIOService {
   void printLocaleMessage(String stringKey);
 }

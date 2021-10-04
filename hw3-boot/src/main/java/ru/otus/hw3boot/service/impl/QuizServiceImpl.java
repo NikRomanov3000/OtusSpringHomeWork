@@ -1,92 +1,93 @@
 package ru.otus.hw3boot.service.impl;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import ru.otus.hw3boot.console.ConsoleMessageFacade;
+import com.opencsv.exceptions.CsvException;
+
+import ru.otus.hw3boot.console.LocalizedIOService;
 import ru.otus.hw3boot.console.IOService;
 import ru.otus.hw3boot.model.Answer;
 import ru.otus.hw3boot.model.Question;
 import ru.otus.hw3boot.model.Quiz;
-import ru.otus.hw3boot.service.CsvParserService;
+import ru.otus.hw3boot.service.QuizDao;
 import ru.otus.hw3boot.service.QuizService;
 
 @Service
 public class QuizServiceImpl implements QuizService {
-  @Value("${quizapplication.passingscore}")
-  private Integer passingScore;
-  @Value("${quizapplication.locale}")
-  private String localeCode;
-  private Integer userScore = 0;
-
-  private final CsvParserService csvParserService;
-  private final ConsoleMessageFacade consoleMessageFacade;
+  private final QuizDao quizDao;
+  private final LocalizedIOService localizedIOService;
   private final IOService ioService;
+  private final int passingScore;
 
-  public QuizServiceImpl(CsvParserService csvParserService,
-      ConsoleMessageFacade consoleMessageFacade, IOService ioService) {
-    this.csvParserService = csvParserService;
-    this.consoleMessageFacade = consoleMessageFacade;
+  public QuizServiceImpl(QuizDao quizDao,
+      LocalizedIOService localizedIOService, IOService ioService,
+      @Value("${quizapplication.passingscore}") int passingScore) {
+    this.quizDao = quizDao;
+    this.localizedIOService = localizedIOService;
     this.ioService = ioService;
+    this.passingScore = passingScore;
   }
 
   @Override
-  public void startQuiz() {
-    Quiz quiz = csvParserService.readCsvFile();
+  public void startQuiz() throws IOException, CsvException {
+    Quiz quiz = quizDao.readQuiz();
+    int userScore = 0;
     for (Question model : quiz.getQuestions()) {
-      consoleMessageFacade.printLocaleMessage("quiz.questionTitle");
+      localizedIOService.printLocaleMessage("quiz.questionTitle");
       ioService.out(model.getQuestion());
-      consoleMessageFacade.printLocaleMessage("quiz.answers");
+      localizedIOService.printLocaleMessage("quiz.answers");
       for (int i = 0; i < model.getAnswers().size(); i++) {
         String result = i + 1 + ") " + model.getAnswers().get(i).getAnswer();
         if (i == model.getAnswers().size() - 1) {
           ioService.out(result + "\n");
-          scanAnswer(model.getAnswers());
+          userScore = scanAnswer(model.getAnswers(), userScore);
         } else {
-          System.out.print(result + " ");
+          ioService.out(result);
         }
-
       }
     }
     checkUserScore(userScore);
   }
 
-  private void scanAnswer(List<Answer> answers) {
+  private int scanAnswer(List<Answer> answers, Integer userScore) {
     Integer userAnswer = Integer.valueOf(ioService.readString());
-    checkAnswer(userAnswer, answers);
+    return checkAnswer(userAnswer, answers, userScore);
   }
 
   private void checkUserScore(Integer userScore) {
     if (userScore >= passingScore) {
-      consoleMessageFacade.printLocaleMessage("quiz.passTest");
+      localizedIOService.printLocaleMessage("quiz.passTest");
     } else {
-      consoleMessageFacade.printLocaleMessage("quiz.failedTest");
+      localizedIOService.printLocaleMessage("quiz.failedTest");
     }
-    consoleMessageFacade.printLocaleMessage("quiz.passingScore");
-    ioService.out(" " + passingScore + " ");
-    consoleMessageFacade.printLocaleMessage("quiz.yourScore");
-    ioService.out(" " + userScore);
+    localizedIOService.printLocaleMessage("quiz.passingScore");
+    ioService.out(String.valueOf(passingScore));
+    localizedIOService.printLocaleMessage("quiz.yourScore");
+    ioService.out(String.valueOf(userScore));
   }
 
-  private Boolean checkAnswer(Integer userAnswer, List<Answer> answersToQuestion) {
-    if (answersToQuestion.get(userAnswer - 1).getRight()) {
-      consoleMessageFacade.printLocaleMessage("quiz.rightAnswer");
-      incrementUserScore();
-      return Boolean.TRUE;
-    } else {
-      consoleMessageFacade.printLocaleMessage("quiz.wrongAnswer");
+  private int checkAnswer(Integer userAnswer, List<Answer> answersToQuestion, int userScore) {
+    if (validateUserAnswer(userAnswer, answersToQuestion.size())) {
+      if (answersToQuestion.get(userAnswer - 1).getRight()) {
+        localizedIOService.printLocaleMessage("quiz.rightAnswer");
+        userScore += 1;
+      } else {
+        localizedIOService.printLocaleMessage("quiz.wrongAnswer");
+      }
     }
-    return Boolean.FALSE;
+    return userScore;
   }
 
-  private void incrementUserScore() {
-    userScore += 1;
-  }
-
-  private Locale getLocaleByCode() {
-    return new Locale(localeCode);
+  private boolean validateUserAnswer(Integer userAnswer, Integer answerListSize) {
+    if (Objects.isNull(userAnswer) || userAnswer > answerListSize) {
+      localizedIOService.printLocaleMessage("quiz.wrongAnswer");
+      return Boolean.FALSE;
+    }
+    return Boolean.TRUE;
   }
 }
