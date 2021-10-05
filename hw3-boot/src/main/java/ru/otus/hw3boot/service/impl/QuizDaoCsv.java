@@ -14,19 +14,19 @@ import ru.otus.hw3boot.model.Question;
 import ru.otus.hw3boot.service.QuizDao;
 
 @Repository
-public class QuizDaoImpl implements QuizDao {
+public class QuizDaoCsv implements QuizDao {
 
   private final CsvReaderWrapper csvReaderWrapper;
   private final int numberOfQuestion;
 
-  public QuizDaoImpl(CsvReaderWrapper csvReaderWrapper,
+  public QuizDaoCsv(CsvReaderWrapper csvReaderWrapper,
       @Value("${quizapplication.numberOfQuestion}") int numberOfQuestion) {
     this.csvReaderWrapper = csvReaderWrapper;
     this.numberOfQuestion = numberOfQuestion;
   }
 
   @Override
-  public Quiz readQuiz() throws RuntimeException {
+  public Quiz readQuiz() {
     String[] line;
     Quiz quiz = new Quiz();
     try (CSVReader csvReader = csvReaderWrapper.getCsvReader()) {

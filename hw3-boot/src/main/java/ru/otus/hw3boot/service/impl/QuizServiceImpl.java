@@ -49,7 +49,7 @@ public class QuizServiceImpl implements QuizService {
   }
 
   private int scanAnswer(List<Answer> answers, int userScore) {
-    int userAnswer = Integer.valueOf(localizedIOService.scanMessage());
+    int userAnswer = Integer.parseInt(localizedIOService.scanMessage());
     return checkAnswer(userAnswer, answers, userScore);
   }
 
@@ -76,10 +76,10 @@ public class QuizServiceImpl implements QuizService {
   }
 
   private boolean validateUserAnswer(int userAnswer, int answerListSize) {
-    if (Objects.isNull(userAnswer) || userAnswer > answerListSize) {
+    if (userAnswer <= 0 || userAnswer > answerListSize) {
       localizedIOService.printLocaleMessage("quiz.wrongAnswer");
-      return Boolean.FALSE;
+      return false;
     }
-    return Boolean.TRUE;
+    return true;
   }
 }

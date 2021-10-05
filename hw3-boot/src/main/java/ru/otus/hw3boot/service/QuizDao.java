@@ -4,5 +4,5 @@ import ru.otus.hw3boot.model.Quiz;
 
 public interface QuizDao {
 
-  Quiz readQuiz() throws RuntimeException;
+  Quiz readQuiz();
 }
