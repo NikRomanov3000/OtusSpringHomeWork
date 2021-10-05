@@ -19,10 +19,23 @@ public class LocalizedIOServiceImpl implements LocalizedIOService {
   }
 
   @Override
-  public void printLocaleMessage(String stringKey) {
-    String message = messageInterpreter.getMessage(stringKey);
+  public void printLocaleMessage(String... stringKey) {
+    String message = messageInterpreter.getMessage(stringKey[0]);
     if (Strings.isNotBlank(message)) {
       ioService.out(message);
     }
+    for (int i = 1; i < stringKey.length; i++) {
+      ioService.out(stringKey[i]);
+    }
+  }
+
+  @Override
+  public void printMessageWithOutLocale(String message) {
+    ioService.out(message);
+  }
+
+  @Override
+  public String scanMessage() {
+    return ioService.readString();
   }
 }

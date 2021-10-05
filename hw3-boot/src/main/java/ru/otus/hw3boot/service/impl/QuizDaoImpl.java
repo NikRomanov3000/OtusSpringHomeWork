@@ -1,13 +1,11 @@
 package ru.otus.hw3boot.service.impl;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 
 import ru.otus.hw3boot.config.beans.CsvReaderWrapper;
 import ru.otus.hw3boot.model.Answer;
@@ -28,16 +26,15 @@ public class QuizDaoImpl implements QuizDao {
   }
 
   @Override
-  public Quiz readQuiz() throws IOException, CsvException {
+  public Quiz readQuiz() throws RuntimeException {
     String[] line;
     Quiz quiz = new Quiz();
-    CSVReader csvReader = csvReaderWrapper.getCsvReader();
-    try {
+    try (CSVReader csvReader = csvReaderWrapper.getCsvReader()) {
       List<String[]> strings = csvReader.readAll();
       for (int i = 0; i < numberOfQuestion; i++) {
         line = strings.get(i);
         Question question = new Question(line[0]);
-        Integer numberOfRightAnswer = Integer.valueOf(line[line.length - 1]);
+        int numberOfRightAnswer = Integer.valueOf(line[line.length - 1]);
         for (int j = 1; j < line.length - 1; j++) {
           Answer answer = new Answer(line[j]);
           if (numberOfRightAnswer == j) {
@@ -46,10 +43,10 @@ public class QuizDaoImpl implements QuizDao {
           question.addAnswerToQuestion(answer);
         }
         quiz.addQuestionToQuiz(question);
+        csvReader.close();
       }
-      csvReader.close();
     } catch (Exception exception) {
-      throw exception;
+      throw new RuntimeException(exception);
     }
 
     return quiz;
