@@ -59,8 +59,8 @@ public class QuizServiceImpl implements QuizService {
     } else {
       localizedIOService.printLocaleMessage("quiz.failedTest");
     }
-    localizedIOService.printLocaleMessage("quiz.passingScore", String.valueOf(passingScore));
-    localizedIOService.printLocaleMessage("quiz.yourScore", String.valueOf(userScore));
+    localizedIOService.printLocaleMessage("quiz.passingScore", passingScore);
+    localizedIOService.printLocaleMessage("quiz.yourScore", userScore);
   }
 
   private int checkAnswer(int userAnswer, List<Answer> answersToQuestion, int userScore) {

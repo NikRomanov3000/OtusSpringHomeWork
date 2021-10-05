@@ -19,7 +19,7 @@ public class MessageInterpreterImpl implements MessageInterpreter {
   }
 
   @Override
-  public String getMessage(String stringKey) {
-    return messageSource.getMessage(stringKey, null, localeConfig.getLocale());
+  public String getMessage(String stringKey, Object ... args) {
+    return messageSource.getMessage(stringKey, args, localeConfig.getLocale());
   }
 }
