@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>HW1-IoC</module>
+        <module>hw4-shell</module>
     </modules>
 
     <properties>
