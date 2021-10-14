@@ -1,7 +1,5 @@
 package ru.otus.hw4shell.test.shell;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +8,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.CommandNotCurrentlyAvailable;
 import org.springframework.shell.Shell;
 import org.springframework.test.annotation.DirtiesContext;
-
-import com.opencsv.exceptions.CsvException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -27,7 +23,7 @@ public class ApplicationEventsCommandsTest {
   @Autowired
   private Shell shell;
 
-  private static final String GREETING_PATTERN = "Добро пожаловать: %s";
+  private static final String GREETING_PATTERN = "Welcome: %s";
   private static final String DEFAULT_LOGIN = "buddy";
   private static final String CUSTOM_LOGIN = "Никита";
   private static final String COMMAND_LOGIN = "login";
@@ -65,8 +61,7 @@ public class ApplicationEventsCommandsTest {
   @DisplayName(" должен возвращать статус выполнения команды publish и вызвать соответствующий метод сервиса есл икоманда выполнена после входа")
   @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
   @Test
-  void shouldReturnExpectedMessageAndFirePublishMethodAfterPublishCommandEvaluated()
-      throws IOException, CsvException {
+  void shouldReturnExpectedMessageAndFirePublishMethodAfterPublishCommandEvaluated() {
     shell.evaluate(() -> COMMAND_LOGIN);
     String res = (String) shell.evaluate(() -> COMMAND_START);
     assertThat(res).isEqualTo(COMMAND_START_EXPECTED_RESULT);

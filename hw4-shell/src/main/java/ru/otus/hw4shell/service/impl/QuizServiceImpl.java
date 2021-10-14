@@ -62,13 +62,13 @@ public class QuizServiceImpl implements QuizService {
     localizedIOService.printLocaleMessage("quiz.yourScore", userScore);
   }
 
-  public int checkAnswer(int userAnswer, List<Answer> answersToQuestion, int userScore) {
+  private int checkAnswer(int userAnswer, List<Answer> answersToQuestion, int userScore) {
     if (validateUserAnswer(userAnswer, answersToQuestion.size())) {
       if (answersToQuestion.get(userAnswer - 1).getRight()) {
-        //localizedIOService.printLocaleMessage("quiz.rightAnswer");
+        localizedIOService.printLocaleMessage("quiz.rightAnswer");
         userScore += 1;
       } else {
-       // localizedIOService.printLocaleMessage("quiz.wrongAnswer");
+       localizedIOService.printLocaleMessage("quiz.wrongAnswer");
       }
     }
     return userScore;
@@ -76,7 +76,7 @@ public class QuizServiceImpl implements QuizService {
 
   private boolean validateUserAnswer(int userAnswer, int answerListSize) {
     if (userAnswer <= 0 || userAnswer > answerListSize) {
-      //localizedIOService.printLocaleMessage("quiz.wrongAnswer");
+      localizedIOService.printLocaleMessage("quiz.wrongAnswer");
       return false;
     }
     return true;

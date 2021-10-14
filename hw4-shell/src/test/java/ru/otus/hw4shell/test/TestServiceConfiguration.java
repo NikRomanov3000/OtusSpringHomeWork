@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.shell.Shell;
+import org.springframework.test.context.TestPropertySource;
 
 import ru.otus.hw4shell.config.beans.CsvReaderWrapper;
 import ru.otus.hw4shell.config.beans.FilenameInitializator;
@@ -25,6 +26,7 @@ import ru.otus.hw4shell.service.QuizService;
 import ru.otus.hw4shell.service.impl.QuizServiceImpl;
 
 @ComponentScan("ru.otus.hw4shell.console")
+@TestPropertySource(locations="classpath:application.yml")
 public class TestServiceConfiguration {
   private final String TEST_FILEPATH = "/test_questions_%s.csv";
   private final int NUMBER_OF_QUESTION = 1;

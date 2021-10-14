@@ -10,34 +10,39 @@ import org.springframework.shell.standard.ShellOption;
 
 import com.opencsv.exceptions.CsvException;
 
+import ru.otus.hw4shell.console.MessageInterpreter;
 import ru.otus.hw4shell.service.QuizService;
 
 @ShellComponent
 public class ApplicationEventsCommands {
 
   private final QuizService quizService;
+  private final MessageInterpreter messageInterpreter;
   private String userName;
+
 
   @ShellMethod(value = "Login command", key = { "l", "login" })
   public String login(@ShellOption(defaultValue = "buddy") String userName) {
     this.userName = userName;
-    return String.format("Добро пожаловать: %s", userName);
+    return messageInterpreter.getMessage("quiz.welcome", userName);
   }
 
-  public ApplicationEventsCommands(QuizService quizService) {
+  public ApplicationEventsCommands(QuizService quizService,
+      MessageInterpreter messageInterpreter) {
     this.quizService = quizService;
+    this.messageInterpreter = messageInterpreter;
   }
 
   @ShellMethod(value = "Start quiz", key = { "s", "start" })
   @ShellMethodAvailability(value = "isStartQuizCommandAvailable")
   public String startQuiz() throws IOException, CsvException {
     quizService.startQuiz();
-    return "Quiz is starting!";
+    return messageInterpreter.getMessage("quiz.start");
   }
 
   private Availability isStartQuizCommandAvailable() {
     return userName == null ?
-        Availability.unavailable("Сначала залогиньтесь") :
+        Availability.unavailable(messageInterpreter.getMessage("quiz.pleaselogin")) :
         Availability.available();
   }
 }

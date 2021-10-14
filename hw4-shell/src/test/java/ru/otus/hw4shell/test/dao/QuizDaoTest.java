@@ -30,12 +30,7 @@ public class QuizDaoTest {
   public void testDao() {
     Quiz testQuiz = quizDao.readQuiz();
     Question question = testQuiz.getQuestions().get(0);
-    List<Answer> answerList = question.getAnswers();
-    Answer rightAnswer = question.getAnswers().get(0);
-
-    assertThat(Objects.equals(prepareQuestionForEqualsTest(), question)).isTrue();
-    //assertThat(answerList.size()).isEqualTo(3);
-    //assertThat(rightAnswer.getRight()).isTrue();
+    assertThat(Objects.equals(prepareQuestionForEqualsTest(), question)).isTrue();;
   }
 
   private Question prepareQuestionForEqualsTest(){
