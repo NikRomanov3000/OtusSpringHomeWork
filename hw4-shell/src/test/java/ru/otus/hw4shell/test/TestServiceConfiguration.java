@@ -25,7 +25,6 @@ import ru.otus.hw4shell.service.QuizService;
 import ru.otus.hw4shell.service.impl.QuizServiceImpl;
 
 @ComponentScan("ru.otus.hw4shell.console")
-//@SpringBootConfiguration
 public class TestServiceConfiguration {
   private final String TEST_FILEPATH = "/test_questions_%s.csv";
   private final int NUMBER_OF_QUESTION = 1;

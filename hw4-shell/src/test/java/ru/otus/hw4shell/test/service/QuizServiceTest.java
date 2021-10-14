@@ -17,10 +17,10 @@ import ru.otus.hw4shell.test.TestServiceConfiguration;
 @DisplayName("Service method test")
 @ContextConfiguration(classes = TestServiceConfiguration.class)
 @SpringBootTest
-public class ServiceTest {
-  private final int USER_SCORE = 0;
-  private final int RIGHT_ANSWER = 1;
-  private final int WRONG_ANSWER = 2;
+public class QuizServiceTest {
+  private static final int USER_SCORE = 0;
+  private static final int RIGHT_ANSWER = 1;
+  private static final int WRONG_ANSWER = 2;
 
   @Autowired
   private QuizService quizService;
