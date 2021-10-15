@@ -8,17 +8,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.otus.hw4shell.dao.QuizDao;
 import ru.otus.hw4shell.model.Answer;
 import ru.otus.hw4shell.model.Question;
 import ru.otus.hw4shell.model.Quiz;
-import ru.otus.hw4shell.test.TestServiceConfiguration;
 
 @DisplayName("QuizDao test")
-@ContextConfiguration(classes = TestServiceConfiguration.class)
 @SpringBootTest
 public class QuizDaoTest {
   private static final String TEST_QUESTION_FOR_QUIZ = "Did your spring test work correctly ?";
