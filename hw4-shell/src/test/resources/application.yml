@@ -4,4 +4,9 @@ spring:
   shell:
     interactive:
       enabled: false
+quizapplication:
+  locale: "en-US"
+  passingscore: 1
+  filepath: "/test_questions_%s.csv"
+  numberOfQuestion: 1
 

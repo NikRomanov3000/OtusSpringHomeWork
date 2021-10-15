@@ -35,7 +35,7 @@ public class ApplicationEventsCommands {
 
   @ShellMethod(value = "Start quiz", key = { "s", "start" })
   @ShellMethodAvailability(value = "isStartQuizCommandAvailable")
-  public String startQuiz() throws IOException, CsvException {
+  public String startQuiz() {
     quizService.startQuiz();
     return messageInterpreter.getMessage("quiz.start");
   }

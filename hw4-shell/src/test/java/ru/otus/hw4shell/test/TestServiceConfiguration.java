@@ -26,11 +26,10 @@ import ru.otus.hw4shell.service.QuizService;
 import ru.otus.hw4shell.service.impl.QuizServiceImpl;
 
 @ComponentScan("ru.otus.hw4shell.console")
-@TestPropertySource(locations="classpath:application.yml")
 public class TestServiceConfiguration {
-  private final String TEST_FILEPATH = "/test_questions_%s.csv";
-  private final int NUMBER_OF_QUESTION = 1;
-  private final int PASSING_SCORE = 1;
+  private static final String TEST_FILEPATH = "/test_questions_%s.csv";
+  private static final int NUMBER_OF_QUESTION = 1;
+  private static final int PASSING_SCORE = 1;
 
   @Autowired
   private LocalizedIOService localizedIOServiceForTest;
