@@ -1,0 +1,54 @@
+package ru.otus.hw4shell.dao.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import com.opencsv.CSVReader;
+
+import ru.otus.hw4shell.config.beans.CsvReaderWrapper;
+import ru.otus.hw4shell.dao.QuizDao;
+import ru.otus.hw4shell.model.Answer;
+import ru.otus.hw4shell.model.Question;
+import ru.otus.hw4shell.model.Quiz;
+
+@Repository
+public class QuizDaoCsv implements QuizDao {
+
+  private final CsvReaderWrapper csvReaderWrapper;
+  private final int numberOfQuestion;
+
+  public QuizDaoCsv(CsvReaderWrapper csvReaderWrapper,
+      @Value("${quizapplication.numberOfQuestion}") int numberOfQuestion) {
+    this.csvReaderWrapper = csvReaderWrapper;
+    this.numberOfQuestion = numberOfQuestion;
+  }
+
+  @Override
+  public Quiz readQuiz() {
+    String[] line;
+    Quiz quiz = new Quiz();
+    try (CSVReader csvReader = csvReaderWrapper.getCsvReader()) {
+      List<String[]> strings = csvReader.readAll();
+      for (int i = 0; i < numberOfQuestion; i++) {
+        line = strings.get(i);
+        Question question = new Question(line[0]);
+        int numberOfRightAnswer = Integer.valueOf(line[line.length - 1]);
+        for (int j = 1; j < line.length - 1; j++) {
+          Answer answer = new Answer(line[j]);
+          if (numberOfRightAnswer == j) {
+            answer.setRight(Boolean.TRUE);
+          }
+          question.addAnswerToQuestion(answer);
+        }
+        quiz.addQuestionToQuiz(question);
+        csvReader.close();
+      }
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
+    }
+
+    return quiz;
+  }
+}
