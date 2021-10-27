@@ -84,7 +84,6 @@ public class BookDaoTest {
   void shouldClearReferenceWithGenre() {
     bookDao.clearReferenceWithGenre(1);
     BookFullInfo book = bookDao.getFullInfoBookById(1);
-
     assertThat(Strings.isBlank(book.getGenreName()));
   }
 }

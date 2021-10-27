@@ -153,7 +153,7 @@ public class ApplicationCommands {
   @ShellMethod(value = "show all books full info by id", key = "showId bfi")
   public void showAllBooksFullInfoById(String id) {
     Long bookId = Long.valueOf(id);
-    BookFullInfo book = bookService.getAllBookFullInfoById(bookId);
+    BookFullInfo book = bookService.getBookFullInfoById(bookId);
     consoleHelper.showBookFullInfo(Arrays.asList(book));
   }
 

@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
   }
 
   @Override
-  public BookFullInfo getAllBookFullInfoById(long id){
+  public BookFullInfo getBookFullInfoById(long id){
     return bookDao.getFullInfoBookById(id);
   }
 

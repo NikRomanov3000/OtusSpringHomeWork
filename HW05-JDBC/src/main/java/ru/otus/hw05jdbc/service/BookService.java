@@ -8,7 +8,7 @@ import ru.otus.hw05jdbc.model.BookFullInfo;
 public interface BookService {
   Book getBookById(long id);
 
-  BookFullInfo getAllBookFullInfoById(long id);
+  BookFullInfo getBookFullInfoById(long id);
 
   List<BookFullInfo> getAllBooksFullInfo();
 
