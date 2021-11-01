@@ -6,20 +6,24 @@ public class Book {
   private long id;
   private String title;
   private String annotation;
-  private Long refAuthorId;
-  private Long refGenreId;
+  private Author author;
+  private Genre genre;
 
-  public Book(long id, String title, String annotation) {
+  public Book(String title, String annotation, Author author,
+      Genre genre) {
+    this.title = title;
+    this.annotation = annotation;
+    this.author = author;
+    this.genre = genre;
+  }
+
+  public Book(long id, String title, String annotation, Author author,
+      Genre genre) {
     this.id = id;
     this.title = title;
     this.annotation = annotation;
-  }
-
-  public Book(String title, String annotation, long authorId, long genreId) {
-    this.title = title;
-    this.annotation = annotation;
-    this.refAuthorId = authorId;
-    this.refGenreId = genreId;
+    this.author = author;
+    this.genre = genre;
   }
 
   public Book() {
@@ -49,20 +53,20 @@ public class Book {
     this.annotation = annotation;
   }
 
-  public long getRefAuthorId() {
-    return refAuthorId;
+  public Author getAuthor() {
+    return author;
   }
 
-  public void setRefAuthorId(long refAuthorId) {
-    this.refAuthorId = refAuthorId;
+  public void setAuthor(Author author) {
+    this.author = author;
   }
 
-  public long getRefGenreId() {
-    return refGenreId;
+  public Genre getGenre() {
+    return genre;
   }
 
-  public void setRefGenreId(long refGenreId) {
-    this.refGenreId = refGenreId;
+  public void setGenre(Genre genre) {
+    this.genre = genre;
   }
 
   @Override
@@ -70,7 +74,9 @@ public class Book {
     return "Book: " +
         "id=" + id + ' ' +
         ", title=" + title + ' ' +
-        ", annotation=" + annotation + '\n';
+        ", annotation=" + annotation +
+        ", author=" + author.getName() + ' ' +
+        ", genre=" + genre.getName() + '\n';
   }
 
   @Override
@@ -82,13 +88,12 @@ public class Book {
       return false;
     }
     Book book = (Book) o;
-    return refAuthorId == book.refAuthorId && refGenreId == book.refGenreId
-        && Objects.equals(title, book.title) && Objects.equals(annotation,
+    return Objects.equals(title, book.title) && Objects.equals(annotation,
                                                                book.annotation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, annotation, refAuthorId, refGenreId);
+    return Objects.hash(title, annotation);
   }
 }

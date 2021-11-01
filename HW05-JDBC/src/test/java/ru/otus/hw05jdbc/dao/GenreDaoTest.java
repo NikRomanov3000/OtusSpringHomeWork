@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ru.otus.hw05jdbc.dao.impl.BookDaoJdbcImpl;
 import ru.otus.hw05jdbc.dao.impl.GenreDaoJdbcImpl;
+import ru.otus.hw05jdbc.exception.BookReferenceException;
 import ru.otus.hw05jdbc.model.Genre;
 
 @DisplayName("Dao для работы c жанрами")
@@ -62,15 +63,32 @@ public class GenreDaoTest {
     assertThat(genreList.get(0)).isEqualTo(expectedGenre);
   }
 
-  @DisplayName("удаляем жанр по id")
+  @DisplayName("пытаемся удалить жанр связанный с книгами по id")
+  @Test
+  void shouldThrowExceptionWhenDeleteGenreWithBookById(){
+    assertThatThrownBy(() -> genreDao.deleteGenreById(TEST_GENRE_ID))
+        .isInstanceOf(BookReferenceException.class);
+  }
+
+  @DisplayName("удаление жанр по id")
   @Test
   void shouldCorrectDeleteGenre(){
     assertThatCode(() -> genreDao.getGenreById(TEST_GENRE_ID))
         .doesNotThrowAnyException();
 
-    genreDao.deleteGenreById(TEST_GENRE_ID);
+    genreDao.deleteGenreByIdWithBooks(TEST_GENRE_ID);
 
     assertThatThrownBy(() -> genreDao.getGenreById(TEST_GENRE_ID))
         .isInstanceOf(EmptyResultDataAccessException.class);
+  }
+  @DisplayName("обновляем жанр по id")
+  @Test
+  void shouldCorrectlyUpdatedGenre() {
+    Genre genreForUpdate = new Genre(TEST_GENRE_ID, "updated genre's name", "some updated dsc");
+    genreDao.updateGenre(genreForUpdate);
+
+    Genre updatedGenre = genreDao.getGenreById(TEST_GENRE_ID);
+    assertThat(updatedGenre).isNotNull();
+    assertThat(updatedGenre).isEqualTo(genreForUpdate);
   }
 }

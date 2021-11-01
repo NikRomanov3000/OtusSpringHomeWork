@@ -15,5 +15,5 @@ public interface GenreDao {
 
   void deleteGenreById(long genreId);
 
-  void deleteGenreWithBooks(long genreId);
+  void deleteGenreByIdWithBooks(long genreId);
 }

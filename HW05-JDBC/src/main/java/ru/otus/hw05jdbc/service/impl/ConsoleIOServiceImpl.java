@@ -1,15 +1,15 @@
-package ru.otus.hw05jdbc.util.impl;
+package ru.otus.hw05jdbc.service.impl;
 
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import ru.otus.hw05jdbc.util.IOService;
+import ru.otus.hw05jdbc.service.IOService;
 
-@Component
+@Service
 public class ConsoleIOServiceImpl implements IOService {
     private final PrintStream out;
     private final Scanner sc;

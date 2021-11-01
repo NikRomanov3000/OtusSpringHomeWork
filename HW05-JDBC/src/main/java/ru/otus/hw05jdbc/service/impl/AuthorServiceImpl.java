@@ -33,11 +33,9 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
-  public void updateAuthorById(Author author) {
+  public void updateAuthor(Author author) {
     if (Objects.nonNull(author.getId())) {
-      if (Objects.nonNull(authorDao.getAuthorById(author.getId()))) {
-        authorDao.updateAuthorById(author);
-      }
+        authorDao.updateAuthor(author);
     }
   }
 

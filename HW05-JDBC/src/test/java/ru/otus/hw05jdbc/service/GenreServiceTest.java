@@ -4,47 +4,44 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import ru.otus.hw05jdbc.dao.impl.BookDaoJdbcImpl;
-import ru.otus.hw05jdbc.dao.impl.GenreDaoJdbcImpl;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import ru.otus.hw05jdbc.dao.GenreDao;
 import ru.otus.hw05jdbc.model.Genre;
 import ru.otus.hw05jdbc.service.impl.GenreServiceImpl;
 
 @DisplayName("GenreService")
-@JdbcTest
-@Import({ GenreServiceImpl.class, GenreDaoJdbcImpl.class, BookDaoJdbcImpl.class })
+@SpringBootTest
 public class GenreServiceTest {
-  private static final int GENRE_DEFAULT_LIST_SIZE = 3;
+  private static final int GENRE_DEFAULT_LIST_SIZE = 1;
   private static final long TEST_GENRE_ID = 1;
 
   @Autowired
   private GenreServiceImpl genreService;
-
+  @MockBean
+  private GenreDao genreDao;
 
   @DisplayName("добавлять жанр в БД")
   @Test
   void shouldInsertGenre() {
-    Genre expectedGenre = new Genre("someGenreName", "some dsc");
+    Genre expectedGenre = getTestGenre();
     genreService.addGenre(expectedGenre);
 
-    List<Genre> genreList = genreService.getAllGeneres();
-    assertThat(genreList.size()).isEqualTo(GENRE_DEFAULT_LIST_SIZE + 1);
-    assertThat(genreList.get(GENRE_DEFAULT_LIST_SIZE).getName()).isEqualTo(expectedGenre.getName());
-    assertThat(genreList.get(GENRE_DEFAULT_LIST_SIZE).getDescription()).isEqualTo(
-        expectedGenre.getDescription());
+    verify(genreDao, times(1)).addGenre(expectedGenre);
   }
 
   @DisplayName("возвращать жанр по id")
   @Test
-  void shouldReturnExpectedBookById() {
-    Genre expectedGenre = new Genre(TEST_GENRE_ID, "Mysticism", "some text about mysticism");
+  void shouldReturnExpectedGenreById() {
+    Genre expectedGenre = getTestGenre();
+    Mockito.when(genreDao.getGenreById(TEST_GENRE_ID)).thenReturn(expectedGenre);
+
 
     Genre genre = genreService.getGenreById(TEST_GENRE_ID);
     assertThat(genre).isNotNull();
@@ -54,7 +51,9 @@ public class GenreServiceTest {
   @DisplayName("возвращать все жанры")
   @Test
   void shouldReturnExpectedBookList() {
-    Genre expectedGenre = new Genre(TEST_GENRE_ID, "Mysticism", "some text about mysticism");
+    Genre expectedGenre = getTestGenre();
+    Mockito.when(genreDao.getGenres()).thenReturn(List.of(expectedGenre));
+
     List<Genre> genreList = genreService.getAllGeneres();
 
     assertThat(genreList).isNotNull();
@@ -65,12 +64,21 @@ public class GenreServiceTest {
   @DisplayName("удаляем жанр по id")
   @Test
   void shouldCorrectDeleteGenre() {
-    assertThatCode(() -> genreService.getGenreById(TEST_GENRE_ID))
-        .doesNotThrowAnyException();
-
     genreService.deleteGenreById(TEST_GENRE_ID);
 
-    assertThatThrownBy(() -> genreService.getGenreById(TEST_GENRE_ID))
-        .isInstanceOf(EmptyResultDataAccessException.class);
+    verify(genreDao, times(1)).deleteGenreById(TEST_GENRE_ID);
+  }
+
+  @DisplayName("удаляем жанр по id")
+  @Test
+  void shouldCorrectUpdateGenre() {
+    Genre testGenre = getTestGenre();
+    genreService.updateGenre(testGenre);
+
+    verify(genreDao, times(1)).updateGenre(testGenre);
+  }
+
+  private Genre getTestGenre() {
+    return new Genre(TEST_GENRE_ID, "Mysticism", "some text about mysticism");
   }
 }

@@ -3,7 +3,7 @@ package ru.otus.hw05jdbc.service.impl;
 import org.springframework.stereotype.Service;
 
 import ru.otus.hw05jdbc.service.ApplicationMenu;
-import ru.otus.hw05jdbc.util.IOService;
+import ru.otus.hw05jdbc.service.IOService;
 
 @Service
 public class ApplicationConsoleMenuImpl implements ApplicationMenu {
@@ -35,11 +35,9 @@ public class ApplicationConsoleMenuImpl implements ApplicationMenu {
   public void showMenuForBooks() {
     ioService.out("1) Select all books: show b");
     ioService.out("2) Select book by id: showId b {id}");
-    ioService.out("3) Select books full info: show bfi");
-    ioService.out("4) Select book full info by id: showId bfi {id}");
-    ioService.out("5) Add new book: add b");
-    ioService.out("6) Update book by id: update b {id}");
-    ioService.out("7) Delete books by id: del b {id}");
+    ioService.out("3) Add new book: add b");
+    ioService.out("4) Update book by id: update b {id}");
+    ioService.out("5) Delete books by id: del b {id}");
   }
 
   @Override

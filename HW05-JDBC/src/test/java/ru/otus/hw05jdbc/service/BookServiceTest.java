@@ -4,101 +4,80 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import ru.otus.hw05jdbc.dao.impl.BookDaoJdbcImpl;
+import ru.otus.hw05jdbc.dao.BookDao;
+import ru.otus.hw05jdbc.model.Author;
 import ru.otus.hw05jdbc.model.Book;
-import ru.otus.hw05jdbc.model.BookFullInfo;
+import ru.otus.hw05jdbc.model.Genre;
 import ru.otus.hw05jdbc.service.impl.BookServiceImpl;
 
 @DisplayName("Book Service")
-@JdbcTest
-@Import({BookServiceImpl.class, BookDaoJdbcImpl.class })
+@SpringBootTest
 public class BookServiceTest {
   private static final long TEST_BOOK_ID = 1;
-  private static final long BOOK_DEFAULT_LIST_SIZE = 3;
-  private static final String EXPECTED_BOOK_TITLE = "Thinner";
-  private static final String EXPECTED_AUTHOR_TITLE = "Stephen King";
-  private static final String EXISTING_GENRE_NAME = "Mysticism";
-  private static final String UPDATE_BOOK_TITLE = "Fatter";
+  private static final long BOOK_LIST_SIZE = 1;
 
 
   @Autowired
   private BookServiceImpl bookService;
+  @MockBean
+  private BookDao bookDao;
 
   @DisplayName("получение книги по id")
   @Test
-  void shouldReturnBookById(){
-    Book book = bookService.getBookById(1);
+  void shouldReturnBookById() {
+    Book expectedBook = getBookForTest();
+    Mockito.when(bookDao.getBookById(TEST_BOOK_ID)).thenReturn(expectedBook);
+
+    Book book = bookService.getBookById(TEST_BOOK_ID);
     assertThat(book).isNotNull();
-    assertThat(book.getTitle()).isEqualTo(EXPECTED_BOOK_TITLE);
+    assertThat(book).isEqualTo(expectedBook);
   }
 
   @DisplayName("получение списка книг")
   @Test
   void shouldReturnBooksList(){
+    Book expectedBook = getBookForTest();
+    Mockito.when(bookDao.getBooks()).thenReturn(List.of(expectedBook));
     List<Book> bookList = bookService.getAllBooks();
-    assertThat(bookList).isNotNull();
-    assertThat(bookList.size()).isEqualTo(BOOK_DEFAULT_LIST_SIZE);
-  }
 
-  @DisplayName("получение полной информации о книги по id")
-  @Test
-  void shouldReturnBookFullInfoById(){
-    BookFullInfo book = bookService.getBookFullInfoById(TEST_BOOK_ID);
-    assertThat(book).isNotNull();
-    assertThat(book.getAuthorName()).isEqualTo(EXPECTED_AUTHOR_TITLE);
-    assertThat(book.getGenreName()).isEqualTo(EXISTING_GENRE_NAME);
-  }
-
-  @DisplayName("получение полной информации о книгах")
-  @Test
-  void shouldReturnAllBooksFullInfo() {
-    List<BookFullInfo> bookList = bookService.getAllBooksFullInfo();
     assertThat(bookList).isNotNull();
-    assertThat(bookList.size()).isEqualTo(BOOK_DEFAULT_LIST_SIZE);
+    assertThat(bookList.size()).isEqualTo(BOOK_LIST_SIZE);
   }
 
   @DisplayName("добавление книги")
   @Test
   void shouldAddBook() {
-    Book expectedBook = new Book("Book for test", "some book for test annotation", 1, 1);
+    Book expectedBook = getBookForTest();
     bookService.addBook(expectedBook);
 
-    Book actualBook = bookService.getBookById(BOOK_DEFAULT_LIST_SIZE + 1);
-    assertThat(actualBook).isNotNull();
-    assertThat(actualBook.getTitle()).isEqualTo(expectedBook.getTitle());
-    assertThat(actualBook.getAnnotation()).isEqualTo(expectedBook.getAnnotation());
+    verify(bookDao, times(1)).addBook(expectedBook);
   }
 
-  @DisplayName("обновление книги")
-  @Test
-  void shouldUpdateBook() {
-    Book book = bookService.getBookById(TEST_BOOK_ID);
-    book.setTitle(UPDATE_BOOK_TITLE);
-    bookService.updateBookById(book);
-    bookService.getBookById(TEST_BOOK_ID);
+    @DisplayName("обновление книги")
+    @Test
+    void shouldUpdateBook() {
+      Book expectedBook = getBookForTest();
+      bookService.updateBook(expectedBook);
 
-    assertThat(book).isNotNull();
-    assertThat(book.getTitle()).isEqualTo(UPDATE_BOOK_TITLE);
+      verify(bookDao, times(1)).updateBook(expectedBook);
+    }
+    @DisplayName("удаляем книгу по id")
+    @Test
+    void shouldCorrectDeleteBookById() {
+      bookService.deleteBookById(TEST_BOOK_ID);
+
+      verify(bookDao, times(1)).deleteBookById(TEST_BOOK_ID);
+    }
+  private Book getBookForTest() {
+    return new Book(TEST_BOOK_ID, "Book's title", "book's annotation", new Author(1), new Genre(1));
   }
-
-  @DisplayName("удаляем книгу по id")
-  @Test
-  void shouldCorrectDeleteBookById() {
-    assertThatCode(() -> bookService.getBookById(TEST_BOOK_ID))
-        .doesNotThrowAnyException();
-
-    bookService.deleteBookById(TEST_BOOK_ID);
-
-    assertThatThrownBy(() -> bookService.getBookById(TEST_BOOK_ID))
-        .isInstanceOf(EmptyResultDataAccessException.class);
-  }
-
 }

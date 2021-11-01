@@ -18,6 +18,10 @@ public class Genre {
     this.description = description;
   }
 
+  public Genre(long id) {
+    this.id = id;
+  }
+
   public Genre() {
   }
 

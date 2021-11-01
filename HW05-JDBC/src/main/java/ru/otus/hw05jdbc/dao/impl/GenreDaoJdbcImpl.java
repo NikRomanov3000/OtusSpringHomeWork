@@ -5,15 +5,14 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import ru.otus.hw05jdbc.dao.BookDao;
 import ru.otus.hw05jdbc.dao.GenreDao;
+import ru.otus.hw05jdbc.exception.BookReferenceException;
 import ru.otus.hw05jdbc.model.Genre;
 
 @Repository
@@ -50,39 +49,25 @@ public class GenreDaoJdbcImpl implements GenreDao {
 
   @Override
   public void updateGenre(Genre genre) {
-    StringBuilder BASE_UPDATE_SQL = new StringBuilder("update genre set ");
-    String WHERE_ID = " where id = :id";
-    boolean needSeparatorForNext = false;
-    if (Objects.nonNull(genre.getId())) {
-      if (Strings.isNotBlank(genre.getName())) {
-        String updateName = "name = '" + genre.getName() + "' ";
-        BASE_UPDATE_SQL.append(updateName);
-        needSeparatorForNext = true;
-      }
-      if (Strings.isNotBlank(genre.getDescription())) {
-        String updateDescription = "description = '" + genre.getDescription() + "' ";
-        if (needSeparatorForNext) {
-          BASE_UPDATE_SQL.append(", " + updateDescription);
-        } else {
-          BASE_UPDATE_SQL.append(updateDescription);
-        }
-      }
-    }
-    Map<String, Object> params = Collections.singletonMap("id", genre.getId());
-    namedParameterJdbcOperations.update(BASE_UPDATE_SQL.append(WHERE_ID).toString(), params);
+    namedParameterJdbcOperations.update(
+        "update genre set name = :name, description= :dsc where id = :id;",
+        Map.of("name", genre.getName(), "dsc", genre.getDescription(),
+               "id", genre.getId()));
   }
 
   @Override
   public void deleteGenreById(long genreId) {
-    bookDao.clearReferenceWithGenre(genreId);
-    Map<String, Object> params = Collections.singletonMap("id", genreId);
-    namedParameterJdbcOperations.update("delete from genre where id = :id", params);
+    if (bookDao.existsByGenreId(genreId)) {
+      throw new BookReferenceException("Genre has books! Delete book's references or delete genre with books...");
+    } else {
+      Map<String, Object> params = Collections.singletonMap("id", genreId);
+      namedParameterJdbcOperations.update("delete from genre where id = :id", params);
+    }
   }
 
   @Override
-  public void deleteGenreWithBooks(long genreId) {
-    bookDao.deleteBookByRefGenreId(genreId);
-
+  public void deleteGenreByIdWithBooks(long genreId) {
+    bookDao.deleteBookByGenreId(genreId);
     Map<String, Object> params = Collections.singletonMap("id", genreId);
     namedParameterJdbcOperations.update("delete from genre where id = :id", params);
   }

@@ -6,15 +6,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import ru.otus.hw05jdbc.dao.AuthorDao;
 import ru.otus.hw05jdbc.dao.BookDao;
+import ru.otus.hw05jdbc.exception.BookReferenceException;
 import ru.otus.hw05jdbc.model.Author;
 import ru.otus.hw05jdbc.util.DateFormatter;
 
@@ -56,49 +55,27 @@ public class AuthorDaoJdbcImpl implements AuthorDao {
   }
 
   @Override
-  public void updateAuthorById(Author author) {
-    StringBuilder BASE_UPDATE_SQL = new StringBuilder("update author set ");
-    String WHERE_ID = " where id = :id";
-    boolean needSeparatorForNext = false;
-
-    if (Strings.isNotBlank(author.getName())) {
-      String updateName = "name = '" + author.getName() + "' ";
-      BASE_UPDATE_SQL.append(updateName);
-      needSeparatorForNext = true;
-    }
-    if (Objects.nonNull(author.getDateOfBorn())) {
-      String updateDateOfBorn = "date_of_born = '" + dateFormatter.getStringFromDate(
-          author.getDateOfBorn()) + "' ";
-      if (needSeparatorForNext) {
-        BASE_UPDATE_SQL.append(", " + updateDateOfBorn);
-      } else {
-        BASE_UPDATE_SQL.append(updateDateOfBorn);
-      }
-      needSeparatorForNext = true;
-    }
-    if (Strings.isNotBlank(author.getComment())) {
-      String updateComment = "comment = '" + author.getComment() + "' ";
-      if (needSeparatorForNext) {
-        BASE_UPDATE_SQL.append(", " + updateComment);
-      } else {
-        BASE_UPDATE_SQL.append(updateComment);
-      }
-    }
-    Map<String, Object> params = Collections.singletonMap("id", author.getId());
-    namedParameterJdbcOperations.update(BASE_UPDATE_SQL.append(WHERE_ID).toString(), params);
+  public void updateAuthor(Author author) {
+    namedParameterJdbcOperations.update(
+        "update author set name = :name, date_of_born = :dateOfBorn, comment = :comment where id = :id;",
+        Map.of("name", author.getName(), "comment", author.getComment(),
+               "dateOfBorn", dateFormatter.getStringFromDate(author.getDateOfBorn()), "id",
+               author.getId()));
   }
 
   @Override
   public void deleteAuthorById(long authorId) {
-    bookDao.clearReferenceWithAuthor(authorId);
-    Map<String, Object> params = Collections.singletonMap("id", authorId);
-    namedParameterJdbcOperations.update("delete from author where id = :id", params);
+    if (bookDao.existsByAuthorId(authorId)) {
+      throw new BookReferenceException("Author has books! Delete book's references or delete author with books...");
+    } else {
+      Map<String, Object> params = Collections.singletonMap("id", authorId);
+      namedParameterJdbcOperations.update("delete from author where id = :id", params);
+    }
   }
 
   @Override
   public void deleteAuthorByIdWithBook(long authorId) {
-    bookDao.deleteBookByRefAuthorId(authorId);
-
+    bookDao.deleteBookByAuthorId(authorId);
     Map<String, Object> params = Collections.singletonMap("id", authorId);
     namedParameterJdbcOperations.update("delete from author where id = :id", params);
   }

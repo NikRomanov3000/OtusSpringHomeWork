@@ -2,7 +2,6 @@ package ru.otus.hw05jdbc.dao;
 
 import java.util.List;
 
-import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ru.otus.hw05jdbc.dao.impl.BookDaoJdbcImpl;
+import ru.otus.hw05jdbc.model.Author;
 import ru.otus.hw05jdbc.model.Book;
-import ru.otus.hw05jdbc.model.BookFullInfo;
+import ru.otus.hw05jdbc.model.Genre;
 
 @DisplayName("Dao для работы c книгами")
 @JdbcTest
@@ -31,7 +31,7 @@ public class BookDaoTest {
   @DisplayName("добавлять книгу в БД")
   @Test
   void shouldInsertBook() {
-    Book expectedBook = new Book("Book for test", "some book for test annotation", 1, 1);
+    Book expectedBook = new Book("Book for test", "some book for test annotation", new Author(1), new Genre(1));
     bookDao.addBook(expectedBook);
     List<Book> bookList = bookDao.getBooks();
     assertThat(bookList.size()).isEqualTo(BOOK_DEFAULT_LIST_SIZE + 1);
@@ -50,7 +50,7 @@ public class BookDaoTest {
   @DisplayName("возвращать все книги")
   @Test
   void shouldReturnExpectedBookList() {
-    Book expectedBook = new Book(TEST_BOOK_ID, "Thinner", "some annotation about Thinner");
+    Book expectedBook = new Book(TEST_BOOK_ID, "Thinner", "some annotation about Thinner", new Author(1), new Genre(1));
     List<Book> bookList = bookDao.getBooks();
 
     assertThat(bookList).isNotNull();
@@ -70,20 +70,16 @@ public class BookDaoTest {
         .isInstanceOf(EmptyResultDataAccessException.class);
   }
 
-  @DisplayName("удаляем ссылку с автором по id")
+  @DisplayName("обновляем книгу по id")
   @Test
-  void shouldClearReferenceWithAuthor() {
-    bookDao.clearReferenceWithAuthor(1);
-    BookFullInfo book = bookDao.getFullInfoBookById(1);
+  void shouldCorrectUpdateBookById() {
+    Book forUpdate = new Book(TEST_BOOK_ID, "book's updated name", "updated annotation",
+                              new Author(2), new Genre(3));
 
-    assertThat(Strings.isBlank(book.getAuthorName()));
-  }
+    bookDao.updateBook(forUpdate);
+    Book updatedBook = bookDao.getBookById(TEST_BOOK_ID);
 
-  @DisplayName("удаляем ссылку с жанром по id")
-  @Test
-  void shouldClearReferenceWithGenre() {
-    bookDao.clearReferenceWithGenre(1);
-    BookFullInfo book = bookDao.getFullInfoBookById(1);
-    assertThat(Strings.isBlank(book.getGenreName()));
+    assertThat(updatedBook).isNotNull();
+    assertThat(updatedBook).isEqualTo(forUpdate);
   }
 }

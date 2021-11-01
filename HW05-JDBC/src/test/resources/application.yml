@@ -1,6 +1,9 @@
 server:
   port: 8080
 spring:
+  shell:
+    interactive:
+      enabled: false
   h2:
     console:
       enabled: true

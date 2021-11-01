@@ -35,9 +35,7 @@ public class GenreServiceImpl implements GenreService {
   @Override
   public void updateGenre(Genre genre) {
     if (Objects.nonNull(genre.getId())) {
-      if (Objects.nonNull(genreDao.getGenreById(genre.getId()))) {
         genreDao.updateGenre(genre);
-      }
     }
   }
 
@@ -48,6 +46,6 @@ public class GenreServiceImpl implements GenreService {
 
   @Override
   public void deleteGenreByIdWithBooks(long id) {
-    genreDao.deleteGenreWithBooks(id);
+    genreDao.deleteGenreByIdWithBooks(id);
   }
 }

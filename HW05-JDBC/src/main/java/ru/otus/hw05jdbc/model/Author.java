@@ -22,6 +22,10 @@ public class Author {
     this.comment = comment;
   }
 
+  public Author(long id) {
+    this.id = id;
+  }
+
   public Author() {
   }
 

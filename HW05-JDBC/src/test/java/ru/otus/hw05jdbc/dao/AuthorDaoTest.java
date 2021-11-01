@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import ru.otus.hw05jdbc.dao.impl.AuthorDaoJdbcImpl;
 import ru.otus.hw05jdbc.dao.impl.BookDaoJdbcImpl;
+import ru.otus.hw05jdbc.exception.BookReferenceException;
 import ru.otus.hw05jdbc.model.Author;
 import ru.otus.hw05jdbc.util.impl.DateFormatterImpl;
 
@@ -67,15 +68,35 @@ public class AuthorDaoTest {
     assertThat(author.getName()).isEqualTo(EXISTING_AUTHOR_NAME);
   }
 
+  @DisplayName("пытаемся удалить автора c книгами по id")
+  @Test
+  void shouldThrowExceptionWhenDeleteAuthorWithBookById() {
+    assertThatThrownBy(() -> authorDao.deleteAuthorById(TEST_AUTHOR_ID))
+        .isInstanceOf(BookReferenceException.class);
+  }
+
   @DisplayName("удаляем автора по id")
   @Test
-  void shouldCorrectDeleteAuthorById() {
+  void shouldCorrectlyDeleteAuthorById() {
     assertThatCode(() -> authorDao.getAuthorById(TEST_AUTHOR_ID))
         .doesNotThrowAnyException();
 
-    authorDao.deleteAuthorById(TEST_AUTHOR_ID);
+    authorDao.deleteAuthorByIdWithBook(TEST_AUTHOR_ID);
 
     assertThatThrownBy(() -> authorDao.getAuthorById(TEST_AUTHOR_ID))
         .isInstanceOf(EmptyResultDataAccessException.class);
+  }
+
+  @DisplayName("обновляем автора по id")
+  @Test
+  void shouldCorrectlyUpdateAuthorById() {
+    Author authorForUpdate = new Author(TEST_AUTHOR_ID, "Ivan Ivanov",
+                                        dateFormatter.getDateFromString("1999-04-09"),
+                                        "some update comment");
+    authorDao.updateAuthor(authorForUpdate);
+    Author updatedAuthor = authorDao.getAuthorById(TEST_AUTHOR_ID);
+
+    assertThat(updatedAuthor).isNotNull();
+    assertThat(updatedAuthor).isEqualTo(authorForUpdate);
   }
 }
