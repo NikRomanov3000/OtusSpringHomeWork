@@ -18,7 +18,7 @@ public class GenreUIServiceImpl implements GenreUIService {
 
   @Override
   public Genre getGenreForUpdate(String genreId) {
-    Long id = Long.valueOf(genreId);
+    Long id = Long.parseLong(genreId);
     Genre genre = getGenreForCreate();
 
     return new Genre(id, genre.getName(), genre.getDescription());

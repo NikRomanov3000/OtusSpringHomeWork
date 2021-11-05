@@ -22,7 +22,7 @@ public class AuthorUIServiceImpl implements AuthorUIService {
 
   @Override
   public Author getAuthorForUpdate(String authorId) {
-    Long id = Long.valueOf(authorId);
+    long id = Long.parseLong(authorId);
     Author author = getAuthorForCreate();
 
     return new Author(id, author.getName(), author.getDateOfBorn(), author.getComment());

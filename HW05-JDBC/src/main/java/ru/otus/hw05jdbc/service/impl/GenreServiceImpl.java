@@ -34,7 +34,7 @@ public class GenreServiceImpl implements GenreService {
 
   @Override
   public void updateGenre(Genre genre) {
-    if (Objects.nonNull(genre.getId())) {
+    if (genre.getId() > 0) {
         genreDao.updateGenre(genre);
     }
   }

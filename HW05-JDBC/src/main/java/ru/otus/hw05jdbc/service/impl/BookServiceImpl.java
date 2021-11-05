@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
   @Override
   public void updateBook(Book book) {
-    if (Objects.nonNull(book.getId())) {
+    if (book.getId() > 0) {
       bookDao.updateBook(book);
     }
   }

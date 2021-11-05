@@ -1,5 +1,7 @@
 package ru.otus.hw05jdbc.service;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +21,13 @@ import ru.otus.hw05jdbc.util.impl.DateFormatterImpl;
 
 @DisplayName("Author Service")
 @SpringBootTest
-
 public class AuthorServiceTest {
   private static final int AUTHOR_DEFAULT_LIST_SIZE = 1;
   private static final long TEST_AUTHOR_ID = 1;
 
   @Autowired
   private AuthorServiceImpl authorService;
-  @Autowired
+  @MockBean
   private DateFormatterImpl dateFormatter;
   @MockBean
   private AuthorDao authorDao;
@@ -84,7 +85,8 @@ public class AuthorServiceTest {
   }
 
   private Author getAuthorForTest() {
-    return new Author("Leo Tolstoy", dateFormatter.getDateFromString("1828-09-09"),
+    Mockito.when(dateFormatter.getDateFromString("1828-09-09")).thenReturn(new Date());
+    return new Author(4, "Leo Tolstoy", dateFormatter.getDateFromString("1828-09-09"),
                       "Author of War and Peace");
   }
 }

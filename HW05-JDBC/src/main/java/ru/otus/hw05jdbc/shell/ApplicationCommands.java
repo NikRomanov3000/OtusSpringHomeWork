@@ -68,7 +68,7 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "show author by id", key = "showId a")
   public void showAuthorById(String id) {
-    long authorId = Long.valueOf(id);
+    long authorId = Long.parseLong(id);
     Author author = authorService.getAuthorById(authorId);
 
     authorUIService.showAuthor(List.of(author));
@@ -88,13 +88,13 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "delete author by id", key = "del a")
   public void deleteAuthorById(String id) {
-    long authorId = Long.valueOf(id);
+    long authorId = Long.parseLong(id);
     authorService.deleteAuthorById(authorId);
   }
 
   @ShellMethod(value = "delete author with books by id", key = "del awb")
   public void deleteAuthorWithBooks(String id) {
-    long authorId = Long.valueOf(id);
+    long authorId = Long.parseLong(id);
     authorService.deleteAuthorByIdWithBooks(authorId);
   }
 
@@ -106,7 +106,7 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "show genre by Id", key = "showId g")
   public void showGenreById(String id) {
-    long genreId = Long.valueOf(id);
+    long genreId = Long.parseLong(id);
     Genre genre = genreService.getGenreById(genreId);
     genreUIService.showGenre(List.of(genre));
   }
@@ -125,13 +125,13 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "delete genre by id", key = "del g")
   public void deleteGenreById(String id) {
-    long genreId = Long.valueOf(id);
+    long genreId = Long.parseLong(id);
     genreService.deleteGenreById(genreId);
   }
 
   @ShellMethod(value = "delete genre with books by id", key = "del gwb")
   public void deleteGenreWithBooksById(String id) {
-    long genreId = Long.valueOf(id);
+    long genreId = Long.parseLong(id);
     genreService.deleteGenreByIdWithBooks(genreId);
   }
 
@@ -143,7 +143,7 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "show book by id", key = "showId b")
   public void showBookById(String id) {
-    long bookId = Long.valueOf(id);
+    long bookId = Long.parseLong(id);
     Book book = bookService.getBookById(bookId);
     bookUIService.showBook(List.of(book));
   }
@@ -162,7 +162,7 @@ public class ApplicationCommands {
 
   @ShellMethod(value = "delete book by id", key = "del b")
   public void deleteBookById(String id) {
-    long bookId = Long.valueOf(id);
+    long bookId = Long.parseLong(id);
     bookService.deleteBookById(bookId);
   }
 }

@@ -20,7 +20,7 @@ public class BookUIServiceImpl  implements BookUIService {
 
   @Override
   public Book getBookForUpdate(String bookId) {
-    Long id = Long.valueOf(bookId);
+    Long id = Long.parseLong(bookId);
     Book book = getBookForCreate();
 
     return new Book(id, book.getTitle(), book.getAnnotation(), book.getAuthor(), book.getGenre());
@@ -35,10 +35,10 @@ public class BookUIServiceImpl  implements BookUIService {
     String annotation = ioService.readString();
 
     ioService.out("Enter authorId for book:");
-    Long authorId = Long.valueOf(ioService.readString());
+    Long authorId = Long.parseLong(ioService.readString());
 
     ioService.out("Enter genreId for book:");
-    Long genreId = Long.valueOf(ioService.readString());
+    Long genreId = Long.parseLong(ioService.readString());
 
     return new Book(title, annotation, new Author(authorId), new Genre(genreId));
   }
