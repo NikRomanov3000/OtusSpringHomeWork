@@ -26,7 +26,7 @@ public class CommentServiceTest {
   @MockBean
   private CommentRepository commentRepository;
 
-  @DisplayName("добавлять автора")
+  @DisplayName("добавлять комментарий")
   @Test
   void shouldInsertAuthor() {
     Comment expectedComment = getCommentForTest();
@@ -35,7 +35,7 @@ public class CommentServiceTest {
     verify(commentRepository, times(1)).saveComment(expectedComment);
   }
 
-  @DisplayName("получаем список авторов")
+  @DisplayName("получаем список комментариев")
   @Test
   void shouldReturnExpectedAuthorList() {
     Comment expectedComment = getCommentForTest();
@@ -47,7 +47,7 @@ public class CommentServiceTest {
     assertThat(commentList.get(0)).isEqualTo(expectedComment);
   }
 
-  @DisplayName("возвращать автора по id")
+  @DisplayName("возвращать комментарий по id")
   @Test
   void shouldReturnExpectedBookById() {
     Comment expectedComment = getCommentForTest();
@@ -59,7 +59,7 @@ public class CommentServiceTest {
     assertThat(comment).isEqualTo(expectedComment);
   }
 
-  @DisplayName("удаляем автора по id")
+  @DisplayName("удаляем комментарий по id")
   @Test
   void shouldCorrectDeleteAuthorById() {
     commentService.deleteCommentById(TEST_COMMENT_ID);
@@ -67,7 +67,7 @@ public class CommentServiceTest {
     verify(commentRepository, times(1)).deleteCommentById(TEST_COMMENT_ID);
   }
 
-  @DisplayName("обновляем автора по id")
+  @DisplayName("обновляем комментарий по id")
   @Test
   void shouldCorrectUpdateAuthorById() {
     Comment testComment = getCommentForTest();

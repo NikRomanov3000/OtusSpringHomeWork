@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,6 +23,8 @@ import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "book")
+@NamedEntityGraph(name = "otus-student-avatars-entity-graph",
+                  attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genre")})
 public class Book {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +34,21 @@ public class Book {
   @Column(name = "annotation")
   private String annotation;
 
-  @ManyToOne(targetEntity = Author.class, cascade = CascadeType.MERGE)
+  @Fetch(FetchMode.SELECT)
+  @BatchSize(size = 5)
+  @ManyToOne(targetEntity = Author.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_author_id")
   private Author author;
 
-  @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.MERGE)
+  @Fetch(FetchMode.SELECT)
+  @BatchSize(size = 5)
+  @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_genre_id")
   private Genre genre;
 
   @Fetch(FetchMode.SELECT)
   @BatchSize(size = 5)
-  @OneToMany(targetEntity = Comment.class, cascade = CascadeType.ALL, mappedBy = "book", fetch = FetchType.EAGER)
+  @OneToMany(targetEntity = Comment.class, cascade = CascadeType.ALL, mappedBy = "book", fetch = FetchType.LAZY)
   private List<Comment> comments;
 
   public Book(String title, String annotation, Author author,
