@@ -1,12 +1,12 @@
 databaseChangeLog:
   - include:
-      file: testchangelog/table/author_table_init.xml
+      file: changelog/table/author_table_init.xml
   - include:
-      file: testchangelog/table/genre_table_init.xml
+      file: changelog/table/genre_table_init.xml
   - include:
-      file: testchangelog/table/book_table_init.xml
+      file: changelog/table/book_table_init.xml
   - include:
-      file: testchangelog/table/comment_to_book_table_init.xml
+      file: changelog/table/comment_to_book_table_init.xml
   - include:
       file: testchangelog/data/authot_init_data.xml
   - include:
