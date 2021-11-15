@@ -49,7 +49,7 @@ public class GenreRepositoryJpaImpl implements GenreRepository {
 
   @Override
   public void deleteGenreById(long genreId) {
-    if (bookRepository.existsByGenreId(genreId) == 1) {
+    if (bookRepository.existsByGenreId(genreId)) {
       throw new BookReferenceException(
           "Author has books! Delete book's references or delete author with books...");
     }

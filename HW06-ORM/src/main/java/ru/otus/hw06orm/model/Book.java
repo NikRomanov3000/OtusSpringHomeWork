@@ -23,7 +23,7 @@ import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "book")
-@NamedEntityGraph(name = "otus-student-avatars-entity-graph",
+@NamedEntityGraph(name = "otus-book-author-genre-entity-graph",
                   attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genre")})
 public class Book {
   @Id
@@ -35,13 +35,11 @@ public class Book {
   private String annotation;
 
   @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 5)
   @ManyToOne(targetEntity = Author.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_author_id")
   private Author author;
 
   @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 5)
   @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_genre_id")
   private Genre genre;
@@ -133,9 +131,8 @@ public class Book {
         "id=" + id + ' ' +
         ", title=" + title + ' ' +
         ", annotation=" + annotation +
-        ", author=" + author.getName() + ' ' +
-        ", genre=" + genre.getName() + ' ' +
-        ", comments=" + getCommentsAsString(comments) + '\n';
+        ", author=" + getAuthorName() + ' ' +
+        ", genre=" + getGenreName() + '\n';
   }
 
   @Override
@@ -160,5 +157,19 @@ public class Book {
     StringBuilder sb = new StringBuilder();
     comments.forEach(comment -> sb.append(comment.getComment() + "; "));
     return sb.toString();
+  }
+
+  private String getAuthorName() {
+    if (Objects.isNull(author)) {
+      return new String();
+    }
+    return author.getName();
+  }
+
+  private String getGenreName() {
+    if (Objects.isNull(genre)) {
+      return new String();
+    }
+    return genre.getName();
   }
 }

@@ -1,7 +1,9 @@
 package ru.otus.hw06orm.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,12 +30,24 @@ public class BookRepositoryJpaImpl implements BookRepository {
 
   @Override
   public Book findBookById(long bookId) {
-    return entityManager.find(Book.class, bookId);
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph(
+        "otus-book-author-genre-entity-graph");
+    TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.id = :id",
+                                                       Book.class);
+    query.setParameter("id", bookId);
+    query.setHint("javax.persistence.fetchgraph", entityGraph);
+    List<Book> book = query.getResultList();
+    if (book.isEmpty()) {
+      return new Book();
+    }
+    return book.get(0);
   }
 
   @Override
   public List<Book> findBooks() {
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph("otus-book-author-genre-entity-graph");
     TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
+    query.setHint("javax.persistence.fetchgraph", entityGraph);
     return query.getResultList();
   }
 
@@ -49,7 +63,7 @@ public class BookRepositoryJpaImpl implements BookRepository {
 
   @Override
   public void deleteBookById(long bookId) {
-    if (commentRepository.existsByBookId(bookId) == 1) {
+    if (commentRepository.existsByBookId(bookId)) {
       throw new BookReferenceException(
           "Book has comments! Delete comment's references...");
     }
@@ -89,30 +103,22 @@ public class BookRepositoryJpaImpl implements BookRepository {
   }
 
   @Override
-  public int existsByAuthorId(long authorId) {
+  public boolean existsByAuthorId(long authorId) {
     TypedQuery<Integer> query = entityManager.createQuery(
         "select distinct 1 from Book b where EXISTS (select b.id from Book b where b.author.id = :id)",
         Integer.class);
     query.setParameter("id", authorId);
 
-    if (query.getResultList().isEmpty()) {
-      return 0;
-    } else {
-      return 1;
-    }
+    return !query.getResultList().isEmpty();
   }
 
   @Override
-  public int existsByGenreId(long genreId) {
+  public boolean existsByGenreId(long genreId) {
     TypedQuery<Integer> query = entityManager.createQuery(
         "select distinct 1 from Book b where EXISTS (select b.id from Book b where b.genre.id = :id)",
         Integer.class);
     query.setParameter("id", genreId);
 
-    if (query.getResultList().isEmpty()) {
-      return 0;
-    } else {
-      return 1;
-    }
+    return !query.getResultList().isEmpty();
   }
 }

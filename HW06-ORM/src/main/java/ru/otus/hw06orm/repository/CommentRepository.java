@@ -17,6 +17,6 @@ public interface CommentRepository {
 
   void deleteCommentByBookId(long bookId);
 
-  int existsByBookId(long bookId);
+  boolean existsByBookId(long bookId);
 
 }

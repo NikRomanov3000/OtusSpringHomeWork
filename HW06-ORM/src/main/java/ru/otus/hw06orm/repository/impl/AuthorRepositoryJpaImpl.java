@@ -50,7 +50,7 @@ public class AuthorRepositoryJpaImpl implements AuthorRepository {
 
   @Override
   public void deleteAuthorById(long authorId) {
-    if (bookRepository.existsByAuthorId(authorId) == 1) {
+    if (bookRepository.existsByAuthorId(authorId)) {
       throw new BookReferenceException(
           "Author has books! Delete book's references or delete author with books...");
     }

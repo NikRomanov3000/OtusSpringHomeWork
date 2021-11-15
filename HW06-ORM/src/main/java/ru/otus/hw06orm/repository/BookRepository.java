@@ -21,7 +21,7 @@ public interface BookRepository {
 
   List<Book> getBookByGenreId(long genreId);
 
-  int existsByAuthorId(long authorId);
+  boolean existsByAuthorId(long authorId);
 
-  int existsByGenreId(long genreId);
+  boolean existsByGenreId(long genreId);
 }

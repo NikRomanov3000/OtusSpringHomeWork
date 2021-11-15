@@ -57,15 +57,11 @@ public class CommentRepositoryJpaImpl implements CommentRepository {
   }
 
   @Override
-  public int existsByBookId(long bookId) {
+  public boolean existsByBookId(long bookId) {
     TypedQuery<Integer> query = entityManager.createQuery(
         "select distinct 1 from Comment c where EXISTS (select c.id from Comment c where c.book.id = :id)",
         Integer.class);
     query.setParameter("id", bookId);
-    if (query.getResultList().isEmpty()) {
-      return 0;
-    } else {
-      return 1;
-    }
+    return !query.getResultList().isEmpty();
   }
 }
