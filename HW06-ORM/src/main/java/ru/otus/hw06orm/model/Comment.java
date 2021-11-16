@@ -3,15 +3,20 @@ package ru.otus.hw06orm.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "comment")
+@NamedEntityGraph(name = "otus-comment-book-entity-graph",
+                  attributeNodes = { @NamedAttributeNode("book") })
 public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +24,7 @@ public class Comment {
   @Column(name = "comment")
   private String comment;
 
-  @ManyToOne(targetEntity = Book.class, cascade = CascadeType.MERGE)
+  @ManyToOne(targetEntity = Book.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_book_id")
   private Book book;
 
@@ -65,6 +70,7 @@ public class Comment {
   public String toString() {
     return "Comment: " +
         "id=" + id + ' ' +
-        ", comment='" + comment + '\n';
+        ", comment=" + comment + ' ' +
+        ", book=" + book.getTitle() + '\n';
   }
 }

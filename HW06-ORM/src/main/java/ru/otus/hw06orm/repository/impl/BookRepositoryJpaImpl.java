@@ -1,7 +1,9 @@
 package ru.otus.hw06orm.repository.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -30,17 +32,12 @@ public class BookRepositoryJpaImpl implements BookRepository {
 
   @Override
   public Book findBookById(long bookId) {
-    EntityGraph<?> entityGraph = entityManager.getEntityGraph(
-        "otus-book-author-genre-entity-graph");
-    TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.id = :id",
-                                                       Book.class);
-    query.setParameter("id", bookId);
-    query.setHint("javax.persistence.fetchgraph", entityGraph);
-    List<Book> book = query.getResultList();
-    if (book.isEmpty()) {
-      return new Book();
-    }
-    return book.get(0);
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph",
+                   entityManager.getEntityGraph("otus-book-author-genre-entity-graph"));
+    Book book = entityManager.find(Book.class, bookId, properties);
+
+    return book;
   }
 
   @Override
@@ -70,36 +67,6 @@ public class BookRepositoryJpaImpl implements BookRepository {
     Query query = entityManager.createQuery("delete from Book b where b.id = :id");
     query.setParameter("id", bookId);
     query.executeUpdate();
-  }
-
-  @Override
-  public void deleteBookByAuthorId(long authorId) {
-    Query query = entityManager.createQuery("delete from Book b where b.author.id = :id");
-    query.setParameter("id", authorId);
-    query.executeUpdate();
-  }
-
-  @Override
-  public void deleteBookByGenreId(long genreId) {
-    Query query = entityManager.createQuery("delete from Book b where b.genre.id = :id");
-    query.setParameter("id", genreId);
-    query.executeUpdate();
-  }
-
-  @Override
-  public List<Book> getBookByAuthorId(long authorId) {
-    TypedQuery<Book> query = entityManager.createQuery(
-        "select b from Book b where b.author.id = :id", Book.class);
-    query.setParameter("id", authorId);
-    return query.getResultList();
-  }
-
-  @Override
-  public List<Book> getBookByGenreId(long genreId) {
-    TypedQuery<Book> query = entityManager.createQuery(
-        "select b from Book b where b.genre.id = :id", Book.class);
-    query.setParameter("id", genreId);
-    return query.getResultList();
   }
 
   @Override

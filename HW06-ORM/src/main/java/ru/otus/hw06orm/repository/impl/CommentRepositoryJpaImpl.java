@@ -1,7 +1,10 @@
 package ru.otus.hw06orm.repository.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -9,6 +12,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
+import ru.otus.hw06orm.model.Book;
 import ru.otus.hw06orm.model.Comment;
 import ru.otus.hw06orm.repository.CommentRepository;
 
@@ -23,13 +27,20 @@ public class CommentRepositoryJpaImpl implements CommentRepository {
 
   @Override
   public List<Comment> findComments() {
+    EntityGraph<?> entityGraph = entityManager.getEntityGraph("otus-comment-book-entity-graph");
     TypedQuery<Comment> query = entityManager.createQuery("select c from Comment c", Comment.class);
+    query.setHint("javax.persistence.fetchgraph", entityGraph);
     return query.getResultList();
   }
 
   @Override
   public Comment findCommentById(long commentId) {
-    return entityManager.find(Comment.class, commentId);
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("javax.persistence.fetchgraph",
+                   entityManager.getEntityGraph("otus-comment-book-entity-graph"));
+    Comment comment = entityManager.find(Comment.class, commentId, properties);
+
+    return comment;
   }
 
   @Override

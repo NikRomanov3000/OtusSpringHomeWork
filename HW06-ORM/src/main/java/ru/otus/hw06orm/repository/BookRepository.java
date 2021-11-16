@@ -13,14 +13,6 @@ public interface BookRepository {
 
   void deleteBookById(long bookId);
 
-  void deleteBookByAuthorId(long authorId);
-
-  void deleteBookByGenreId(long genreId);
-
-  List<Book> getBookByAuthorId(long authorId);
-
-  List<Book> getBookByGenreId(long genreId);
-
   boolean existsByAuthorId(long authorId);
 
   boolean existsByGenreId(long genreId);
