@@ -20,6 +20,7 @@
         <module>hw4-shell</module>
         <module>HW05-JDBC</module>
         <module>HW06-ORM</module>
+        <module>HW07-DATA</module>
     </modules>
 
     <properties>
