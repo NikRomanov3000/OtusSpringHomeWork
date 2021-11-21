@@ -28,7 +28,7 @@ public class CommentServiceTest {
 
   @DisplayName("добавлять комментарий")
   @Test
-  void shouldInsertAuthor() {
+  void shouldInsertComment() {
     Comment expectedComment = getCommentForTest();
     commentService.addComment(expectedComment);
 
@@ -37,11 +37,11 @@ public class CommentServiceTest {
 
   @DisplayName("получаем список комментариев")
   @Test
-  void shouldReturnExpectedAuthorList() {
+  void shouldReturnExpectedCommentList() {
     Comment expectedComment = getCommentForTest();
-    Mockito.when(commentRepository.findAll()).thenReturn(List.of(expectedComment));
+    Mockito.when(commentRepository.findCommentByBookId(TEST_BOOK_ID)).thenReturn(List.of(expectedComment));
 
-    List<Comment> commentList = commentService.getAllComments();
+    List<Comment> commentList = commentService.getAllCommentsForBookById(TEST_BOOK_ID);
 
     assertThat(commentList).isNotNull();
     assertThat(commentList.get(0)).isEqualTo(expectedComment);
@@ -49,7 +49,7 @@ public class CommentServiceTest {
 
   @DisplayName("возвращать комментарий по id")
   @Test
-  void shouldReturnExpectedBookById() {
+  void shouldReturnExpectedCommentById() {
     Comment expectedComment = getCommentForTest();
     Mockito.when(commentRepository.findById(TEST_COMMENT_ID)).thenReturn(expectedComment);
 
@@ -61,7 +61,7 @@ public class CommentServiceTest {
 
   @DisplayName("удаляем комментарий по id")
   @Test
-  void shouldCorrectDeleteAuthorById() {
+  void shouldCorrectDeleteCommentById() {
     commentService.deleteCommentById(TEST_COMMENT_ID);
 
     verify(commentRepository, times(1)).deleteById(TEST_COMMENT_ID);
@@ -69,7 +69,7 @@ public class CommentServiceTest {
 
   @DisplayName("обновляем комментарий по id")
   @Test
-  void shouldCorrectUpdateAuthorById() {
+  void shouldCorrectUpdateCommentById() {
     Comment testComment = getCommentForTest();
     commentService.updateComment(testComment);
 

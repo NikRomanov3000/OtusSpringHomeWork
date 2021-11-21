@@ -8,7 +8,7 @@ public interface CommentService {
 
   Comment getCommentById(long commentId);
 
-  List<Comment> getAllComments();
+  List<Comment> getAllCommentsForBookById(long bookId);
 
   void addComment(Comment comment);
 

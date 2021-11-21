@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.hw07data.model.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-  @EntityGraph(attributePaths = "book")
-  List<Comment> findAll();
 
   @EntityGraph(attributePaths = "book")
   Comment findById(long commentId);
+
+  @EntityGraph(attributePaths = "book")
+  List<Comment> findCommentByBookId(long bookId);
 
   boolean existsByBookId(long bookId);
 }

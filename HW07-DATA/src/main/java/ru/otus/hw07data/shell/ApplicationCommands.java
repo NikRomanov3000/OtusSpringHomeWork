@@ -180,9 +180,10 @@ public class ApplicationCommands {
     bookService.deleteBookById(bookId);
   }
 
-  @ShellMethod(value = "show all comment", key = "show c")
-  public void getAllComments() {
-    List<Comment> commentList = commentService.getAllComments();
+  @ShellMethod(value = "show all comment for book by Id", key = "show c")
+  public void getAllCommentsForBookById(String id) {
+    long bookId = Long.parseLong(id);
+    List<Comment> commentList = commentService.getAllCommentsForBookById(bookId);
     commentUIService.showComment(commentList);
   }
 

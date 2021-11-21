@@ -21,6 +21,7 @@ public class CommentRepositoryJpaTest {
   private static final long TEST_COMMENT_ID = 1;
   private static final long TEST_BOOK_ID = 1;
   private static final int EXPECTED_NUMBER_OF_COMMENT = 3;
+  private static final int EXPECTED_NUMBER_OF_COMMENT_FOR_TEST_BOOK = 2;
 
   @Autowired
   private CommentRepository commentRepository;
@@ -36,15 +37,15 @@ public class CommentRepositoryJpaTest {
     assertThat(actualComment).usingRecursiveComparison().isEqualTo(expectedComment);
   }
 
-  @DisplayName("должен загружать список всех комментариев")
+  @DisplayName("должен загружать список всех комментариев для книги")
   @Test
   void shouldReturnCorrectCommentList() {
     SessionFactory sessionFactory = testEntityManager.getEntityManager().getEntityManagerFactory()
                                                      .unwrap(SessionFactory.class);
     sessionFactory.getStatistics().setStatisticsEnabled(true);
 
-    final var commentList = commentRepository.findAll();
-    assertThat(commentList).isNotNull().hasSize(EXPECTED_NUMBER_OF_COMMENT)
+    final var commentList = commentRepository.findCommentByBookId(TEST_BOOK_ID);
+    assertThat(commentList).isNotNull().hasSize(EXPECTED_NUMBER_OF_COMMENT_FOR_TEST_BOOK)
                           .allMatch(с -> !с.getComment().isEmpty());
   }
 
