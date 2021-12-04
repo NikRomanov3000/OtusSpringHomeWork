@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: changelog/table/author_table_init.xml
+  - include:
+      file: changelog/table/genre_table_init.xml
+  - include:
+      file: changelog/table/book_table_init.xml
+  - include:
+      file: changelog/table/comment_to_book_table_init.xml
+  - include:
+      file: testchangelog/data/authot_init_data.xml
+  - include:
+      file: testchangelog/data/genre_init_data.xml
+  - include:
+      file: testchangelog/data/book_init_data.xml
+  - include:
+      file: testchangelog/data/comment_to_book_init_data.xml
