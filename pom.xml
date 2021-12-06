@@ -21,6 +21,7 @@
         <module>HW05-JDBC</module>
         <module>HW06-ORM</module>
         <module>HW07-DATA</module>
+        <module>HW08-MONGO</module>
     </modules>
 
     <properties>
