@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true
+  data:
+    mongodb:
+      host: localhost
+      port: 0
+      database: test-library
+  mongodb:
+    embedded:
+      version: 3.4.0
+
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+mongock:
+  change-logs-scan-package:
+    - ru.otus.hw08mongo.testchangelog
+  runner-type: initializingbean
