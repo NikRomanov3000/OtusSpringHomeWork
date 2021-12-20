@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.otus.hw08mongo.model.Genre;
@@ -17,6 +18,8 @@ public class GenreRepositoryTest {
 
   @Autowired
   private GenreRepository genreRepository;
+  @Autowired
+  private MongoOperations mongoOperations;
 
   @DisplayName("должен загружать информацию о нужном жанре по его id")
   @Test
@@ -28,7 +31,7 @@ public class GenreRepositoryTest {
   @DisplayName("должен загружать информацию о нужном жанре по его имени")
   @Test
   void shouldFindExpectedGenreByName() {
-    final var actualGenre = genreRepository.findGenreByName(getGenreForTest().getName());
+    final var actualGenre = genreRepository.findByName(getGenreForTest().getName());
     assertThat(actualGenre).usingRecursiveComparison().isEqualTo(getGenreForTest());
   }
 
@@ -47,8 +50,8 @@ public class GenreRepositoryTest {
 
     genreRepository.deleteById(getGenreIdForTest());
 
-    Optional<Genre> genre = genreRepository.findById(getGenreIdForTest());
-    assertThat(genre).isEmpty();
+    Genre genre = mongoOperations.findById(getGenreIdForTest(), Genre.class);
+    assertThat(genre).isNull();
   }
 
   @DisplayName("должен корректно добавлять жанр")
@@ -57,12 +60,11 @@ public class GenreRepositoryTest {
     Genre genreForAdding = new Genre("some New Genre",
                                      "some dsc for genre");
     String id = genreRepository.save(genreForAdding).getId();
+    Genre genre = mongoOperations.findById(id, Genre.class);
 
-    Optional<Genre> genre = genreRepository.findById(id);
-
-    assertThat(genre).isNotEmpty();
-    assertThat(genre.get().getName()).isEqualTo(genreForAdding.getName());
-    assertThat(genre.get().getDescription()).isEqualTo(genreForAdding.getDescription());
+    assertThat(genre).isNotNull();
+    assertThat(genre.getName()).isEqualTo(genreForAdding.getName());
+    assertThat(genre.getDescription()).isEqualTo(genreForAdding.getDescription());
   }
 
   @DisplayName("должен корректно обнавлять жанр")
@@ -72,13 +74,11 @@ public class GenreRepositoryTest {
 
     Genre genreForUpdate = getGenreForTest();
     genreForUpdate.setName(nameForUpdate);
-
     String id = genreRepository.save(genreForUpdate).getId();
-
-    Optional<Genre> genre = genreRepository.findById(id);
+    Genre genre = mongoOperations.findById(id, Genre.class);
 
     assertThat(genre).isNotNull();
-    assertThat(genre.get().getName()).isEqualTo(nameForUpdate);
+    assertThat(genre.getName()).isEqualTo(nameForUpdate);
   }
 
   private Genre getGenreForTest() {

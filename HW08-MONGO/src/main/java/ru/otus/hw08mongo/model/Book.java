@@ -11,13 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("books")
 public class Book {
   @Id
-  private ObjectId id;
+  private String id;
   private String title;
   private String annotation;
-  @Transient
-  private String authorId;
-  @Transient
-  private String genreId;
   private Author author;
   private Genre genre;
 
@@ -36,15 +32,17 @@ public class Book {
   public Book(String title, String annotation, String authorId, String genreId) {
     this.title = title;
     this.annotation = annotation;
-    this.authorId = authorId;
-    this.genreId = genreId;
+    this.author = new Author();
+    this.genre = new Genre();
+    author.setId(authorId);
+    genre.setId(genreId);
   }
 
   public Book() {
   }
 
   public String getId() {
-    return id.toString();
+    return id;
   }
 
   public String getTitle() {
@@ -64,23 +62,27 @@ public class Book {
   }
 
   public void setId(String id) {
-    this.id = new ObjectId(id);
+    this.id = id;
   }
 
   public String getAuthorId() {
-    return authorId;
+    return author.getId();
   }
 
   public void setAuthorId(String authorId) {
-    this.authorId = authorId;
+    if (Objects.nonNull(author)) {
+      author.setId(authorId);
+    }
   }
 
   public String getGenreId() {
-    return genreId;
+    return genre.getId();
   }
 
   public void setGenreId(String genreId) {
-    this.genreId = genreId;
+    if (Objects.nonNull(genre)) {
+      genre.setId(genreId);
+    }
   }
 
   public Author getAuthor() {
@@ -101,7 +103,7 @@ public class Book {
 
   public String getEntityAsString() {
     return "Book: " +
-        "id=" + id.toString() + ' ' +
+        "id=" + id + ' ' +
         ", title=" + title + ' ' +
         ", annotation=" + annotation +
         ", author=" + getAuthorName() + ' ' +

@@ -14,7 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import ru.otus.hw08mongo.model.Book;
+import ru.otus.hw08mongo.repository.AuthorRepository;
 import ru.otus.hw08mongo.repository.BookRepository;
+import ru.otus.hw08mongo.repository.GenreRepository;
 import ru.otus.hw08mongo.service.impl.BookServiceImpl;
 
 @DisplayName("Book Service")
@@ -27,6 +29,11 @@ public class BookServiceTest {
   private BookServiceImpl bookService;
   @MockBean
   private BookRepository bookRepository;
+  @MockBean
+  private AuthorRepository authorRepository;
+  @MockBean
+  private GenreRepository genreRepository;
+
 
   @DisplayName("получение книги по id")
   @Test

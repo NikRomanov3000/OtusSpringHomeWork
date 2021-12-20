@@ -3,9 +3,12 @@ package ru.otus.hw08mongo.repository;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.otus.hw08mongo.model.Author;
@@ -13,9 +16,12 @@ import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
 
 @DisplayName("Author Repository")
 @DataMongoTest
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class AuthorRepositoryTest {
   @Autowired
   private AuthorRepository authorRepository;
+  @Autowired
+  private MongoOperations mongoOperations;
 
   @DisplayName("должен загружать информацию о нужном авторе по его id")
   @Test
@@ -27,13 +33,13 @@ public class AuthorRepositoryTest {
   @DisplayName("должен загружать информацию о нужном авторе по его имени")
   @Test
   void shouldFindExpectedAuthorByName() {
-    final var actualAuthor = authorRepository.findByAuthorName(getAuthorForTest().getName());
+    final var actualAuthor = authorRepository.findByName(getAuthorForTest().getName());
     assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(getAuthorForTest());
   }
 
   @DisplayName("должен загружать список всех авторе")
   @Test
-  void shouldReturnCorrectAuthorList() {
+  void shouldCorrectReturnAuthorList() {
     final int expectedNumberOfAuthors = 3;
     final var authorList = authorRepository.findAll();
     assertThat(authorList).isNotNull().hasSize(expectedNumberOfAuthors)
@@ -45,39 +51,36 @@ public class AuthorRepositoryTest {
   void shouldCorrectlyDeleteAuthorById() {
     authorRepository.deleteById(getAuthorIdForTest());
 
-    Optional<Author> author = authorRepository.findById(getAuthorIdForTest());
-    assertThat(author).isEmpty();
+   Author author = mongoOperations.findById(getAuthorIdForTest(), Author.class);
+    assertThat(author).isNull();
   }
 
   @DisplayName("должен корректно добавлять автора")
   @Test
-  void shouldCorrectlyInsertAuthor() {
+  void shouldInsertAuthor() {
     String authorName = "some New Author";
     String authorComment = "some comment for author";
     Author authorForAdding = new Author(authorName, authorComment);
     String id = authorRepository.save(authorForAdding).getId();
+    Author author = mongoOperations.findById(id, Author.class);
 
-    Optional<Author> author = authorRepository.findById(id);
-
-    assertThat(author).isNotEmpty();
-    assertThat(author.get().getName()).isEqualTo(authorName);
-    assertThat(author.get().getComment()).isEqualTo(authorComment);
+    assertThat(author).isNotNull();
+    assertThat(author.getName()).isEqualTo(authorName);
+    assertThat(author.getComment()).isEqualTo(authorComment);
   }
 
   @DisplayName("должен корректно обнавлять автора")
   @Test
   void shouldCorrectlyUpdateAuthorById() {
     String nameForUpdate = "some name for update";
-
     Author authorForUpdate = getAuthorForTest();
     authorForUpdate.setName(nameForUpdate);
 
     authorRepository.save(authorForUpdate);
 
-    Optional<Author> author = authorRepository.findById(authorForUpdate.getId());
-
-    assertThat(author).isNotEmpty();
-    assertThat(author.get().getName()).isEqualTo(nameForUpdate);
+    Author author = mongoOperations.findById(authorForUpdate.getId(), Author.class);
+    assertThat(author).isNotNull();
+    assertThat(author.getName()).isEqualTo(nameForUpdate);
   }
 
   private Author getAuthorForTest() {

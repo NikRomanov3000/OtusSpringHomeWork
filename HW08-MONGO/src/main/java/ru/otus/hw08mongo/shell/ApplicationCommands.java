@@ -14,10 +14,7 @@ import ru.otus.hw08mongo.service.AuthorService;
 import ru.otus.hw08mongo.service.BookService;
 import ru.otus.hw08mongo.service.CommentService;
 import ru.otus.hw08mongo.service.GenreService;
-import ru.otus.hw08mongo.service.ui.AuthorUIService;
-import ru.otus.hw08mongo.service.ui.BookUIService;
-import ru.otus.hw08mongo.service.ui.CommentUIService;
-import ru.otus.hw08mongo.service.ui.GenreUIService;
+import ru.otus.hw08mongo.service.ui.UIServiceFacade;
 
 @ShellComponent
 public class ApplicationCommands {
@@ -26,26 +23,18 @@ public class ApplicationCommands {
   private final BookService bookService;
   private final CommentService commentService;
   private final ApplicationMenu applicationMenu;
-  private final AuthorUIService authorUIService;
-  private final BookUIService bookUIService;
-  private final GenreUIService genreUIService;
-  private final CommentUIService commentUIService;
+  private final UIServiceFacade uiServiceFacade;
 
   public ApplicationCommands(AuthorService authorService,
       GenreService genreService, BookService bookService,
       CommentService commentService, ApplicationMenu applicationMenu,
-      AuthorUIService authorUIService,
-      BookUIService bookUIService, GenreUIService genreUIService,
-      CommentUIService commentUIService) {
+      UIServiceFacade uiServiceFacade) {
     this.authorService = authorService;
     this.genreService = genreService;
     this.bookService = bookService;
     this.commentService = commentService;
     this.applicationMenu = applicationMenu;
-    this.authorUIService = authorUIService;
-    this.bookUIService = bookUIService;
-    this.genreUIService = genreUIService;
-    this.commentUIService = commentUIService;
+    this.uiServiceFacade = uiServiceFacade;
   }
 
   @ShellMethod(value = "start command", key = { "s", "start" })
@@ -77,25 +66,25 @@ public class ApplicationCommands {
   public void showAuthors() {
     List<Author> authorList = authorService.getAllAuthors();
 
-    authorUIService.showAuthor(authorList);
+    uiServiceFacade.showAuthor(authorList);
   }
 
   @ShellMethod(value = "show author by id", key = "showId a")
   public void showAuthorById(String id) {
     Author author = authorService.getAuthorById(id);
 
-    authorUIService.showAuthor(List.of(author));
+    uiServiceFacade.showAuthor(List.of(author));
   }
 
   @ShellMethod(value = "add new author", key = "add a")
   public void addAuthor() {
-    Author author = authorUIService.getAuthorForCreate();
+    Author author = uiServiceFacade.getAuthorForCreate();
     authorService.addAuthor(author);
   }
 
   @ShellMethod(value = "update author", key = "update a")
   public void updateAuthor(String id) {
-    Author author = authorUIService.getAuthorForUpdate(id);
+    Author author = uiServiceFacade.getAuthorForUpdate(id);
     authorService.updateAuthor(author);
   }
 
@@ -107,24 +96,24 @@ public class ApplicationCommands {
   @ShellMethod(value = "show all genres", key = "show g")
   public void showAllGenres() {
     List<Genre> genreList = genreService.getAllGeneres();
-    genreUIService.showGenre(genreList);
+    uiServiceFacade.showGenre(genreList);
   }
 
   @ShellMethod(value = "show genre by Id", key = "showId g")
   public void showGenreById(String id) {
     Genre genre = genreService.getGenreById(id);
-    genreUIService.showGenre(List.of(genre));
+    uiServiceFacade.showGenre(List.of(genre));
   }
 
   @ShellMethod(value = "add new genre", key = "add g")
   public void addGenre() {
-    Genre genre = genreUIService.getGenreForCreate();
+    Genre genre = uiServiceFacade.getGenreForCreate();
     genreService.addGenre(genre);
   }
 
   @ShellMethod(value = "update author", key = "update g")
   public void updateGenre(String id) {
-    Genre genre = genreUIService.getGenreForUpdate(id);
+    Genre genre = uiServiceFacade.getGenreForUpdate(id);
     genreService.updateGenre(genre);
   }
 
@@ -136,24 +125,24 @@ public class ApplicationCommands {
   @ShellMethod(value = "show all books", key = "show b")
   public void showAllBooks() {
     List<Book> bookList = bookService.getAllBooks();
-    bookUIService.showBook(bookList);
+    uiServiceFacade.showBook(bookList);
   }
 
   @ShellMethod(value = "show book by id", key = "showId b")
   public void showBookById(String id) {
     Book book = bookService.getBookById(id);
-    bookUIService.showBook(List.of(book));
+    uiServiceFacade.showBook(List.of(book));
   }
 
   @ShellMethod(value = "add new book", key = "add b")
   public void addBook() {
-    Book book = bookUIService.getBookForCreate();
+    Book book = uiServiceFacade.getBookForCreate();
     bookService.addBook(book);
   }
 
   @ShellMethod(value = "update book by id", key = "update b")
   public void updateBook(String id) {
-    Book book = bookUIService.getBookForUpdate(id);
+    Book book = uiServiceFacade.getBookForUpdate(id);
     bookService.updateBook(book);
   }
 
@@ -165,24 +154,24 @@ public class ApplicationCommands {
   @ShellMethod(value = "show all comment for book by Id", key = "show c")
   public void getAllCommentsForBookById(String id) {
     List<Comment> commentList = commentService.getAllCommentsForBookById(id);
-    commentUIService.showComment(commentList);
+    uiServiceFacade.showComment(commentList);
   }
 
   @ShellMethod(value = "show comment by id", key = "showId c")
   public void getCommentById(String id) {
     Comment comment = commentService.getCommentById(id);
-    commentUIService.showComment(List.of(comment));
+    uiServiceFacade.showComment(List.of(comment));
   }
 
   @ShellMethod(value = "add new comment", key = "add c")
   public void addComment() {
-    Comment comment = commentUIService.getCommentForCreate();
+    Comment comment = uiServiceFacade.getCommentForCreate();
     commentService.addComment(comment);
   }
 
   @ShellMethod(value = "update comment by id", key = "update c")
   public void updateComment(String id) {
-    Comment comment = commentUIService.getCommentForUpdate(id);
+    Comment comment = uiServiceFacade.getCommentForUpdate(id);
     commentService.updateComment(comment);
   }
 

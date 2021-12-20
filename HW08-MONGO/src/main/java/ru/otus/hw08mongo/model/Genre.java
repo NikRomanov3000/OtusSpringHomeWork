@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("genres")
 public class Genre {
   @Id
-  private ObjectId id;
+  private String id;
   @Indexed
   private String name;
   private String description;
@@ -24,11 +24,11 @@ public class Genre {
   }
 
   public String getId() {
-    return id.toString();
+    return id;
   }
 
   public void setId(String id) {
-    this.id = new ObjectId(id);
+    this.id = id;
   }
 
   public String getName() {
@@ -47,11 +47,11 @@ public class Genre {
     this.description = description;
   }
 
-  public String getEntityAsString(){
+  public String getEntityAsString() {
     return "Genre: " +
         "id=" + id + ' ' +
         ", name=" + name + ' ' +
-        ", description=" + description + '\n' ;
+        ", description=" + description + '\n';
   }
 
   @Override

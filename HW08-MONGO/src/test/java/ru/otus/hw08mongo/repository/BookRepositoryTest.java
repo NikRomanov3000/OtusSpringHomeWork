@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import ru.otus.hw08mongo.model.Book;
@@ -19,6 +20,8 @@ import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
 public class BookRepositoryTest {
   @Autowired
   private BookRepository bookRepository;
+  @Autowired
+  private MongoOperations mongoOperations;
 
   @DisplayName("должен загружать информацию о нужной книге по id")
   @Test
@@ -30,14 +33,14 @@ public class BookRepositoryTest {
   @DisplayName("должен загружать информацию о нужной книге по названию")
   @Test
   void shouldCorrectlyFindExpectedBookByTitle() {
-    final var actualBook = bookRepository.findByBookTitle(getBookForTest().getTitle());
+    final var actualBook = bookRepository.findByTitle(getBookForTest().getTitle());
     assertThat(actualBook).usingRecursiveComparison().isEqualTo(getBookForTest());
   }
 
   @DisplayName("должен загружать список всех книг")
   @Test
   void shouldCorrectlyReturnCorrectBookList() {
-    final int expectedNumberOfBooks= 3;
+    final int expectedNumberOfBooks = 3;
     final var bookList = bookRepository.findAll();
     assertThat(bookList).isNotNull().hasSize(expectedNumberOfBooks)
                         .allMatch(b -> !b.getTitle().isEmpty())
@@ -45,18 +48,14 @@ public class BookRepositoryTest {
                         .allMatch(b -> b.getGenre() != null);
   }
 
-
-
   @DisplayName("должен корректно добавлять книгу")
   @Test
   void shouldInsertBook() {
     Book bookForAdding = new Book("some New Book", "some annotation");
     String id = bookRepository.save(bookForAdding).getId();
+    Book book = mongoOperations.findById(id, Book.class);
 
-    Optional<Book> optionalBook = bookRepository.findById(id);
-    Book book = optionalBook.get();
-
-    assertThat(optionalBook).isNotEmpty();
+    assertThat(book).isNotNull();
     assertThat(book.getTitle()).isEqualTo(book.getTitle());
     assertThat(book.getAnnotation()).isEqualTo(bookForAdding.getAnnotation());
   }
@@ -69,10 +68,10 @@ public class BookRepositoryTest {
     bookForUpdate.setTitle(titleForUpdate);
 
     bookRepository.save(bookForUpdate);
-    Optional<Book> book = bookRepository.findById(getBookIdForTest());
+    Book book = mongoOperations.findById(getBookIdForTest(), Book.class);
 
-    assertThat(book).isNotEmpty();
-    assertThat(book.get().getTitle()).isEqualTo(titleForUpdate);
+    assertThat(book).isNotNull();
+    assertThat(book.getTitle()).isEqualTo(titleForUpdate);
   }
 
   @DisplayName("должен корректно удалить книги")
@@ -80,8 +79,8 @@ public class BookRepositoryTest {
   void shouldDeleteBookById() {
     bookRepository.deleteById(getBookIdForTest());
 
-    Optional<Book> book = bookRepository.findById(getBookForTest().getId());
-    assertThat(book).isEmpty();
+    Book book = mongoOperations.findById(getBookForTest().getId(), Book.class);
+    assertThat(book).isNull();
   }
 
   private Book getBookForTest() {

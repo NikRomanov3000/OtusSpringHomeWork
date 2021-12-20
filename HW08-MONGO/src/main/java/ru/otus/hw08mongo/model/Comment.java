@@ -1,5 +1,7 @@
 package ru.otus.hw08mongo.model;
 
+import java.util.Objects;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -8,10 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("comments")
 public class Comment {
   @Id
-  private ObjectId id;
+  private String id;
   private String comment;
-  @Transient
-  private String bookId;
   private Book book;
 
   public Comment(String comment, Book book) {
@@ -21,18 +21,19 @@ public class Comment {
 
   public Comment(String comment, String bookId) {
     this.comment = comment;
-    this.bookId = bookId;
+    this.book = new Book();
+    book.setId(bookId);
   }
 
   public Comment() {
   }
 
   public String getId() {
-    return id.toString();
+    return id;
   }
 
   public void setId(String id) {
-    this.id = new ObjectId(id);
+    this.id = id;
   }
 
   public String getComment() {
@@ -52,16 +53,18 @@ public class Comment {
   }
 
   public String getBookId() {
-    return bookId;
+    return book.getId();
   }
 
   public void setBookId(String bookId) {
-    this.bookId = bookId;
+    if(Objects.nonNull(book)){
+      book.setId(bookId);
+    }
   }
 
   public String getEntityAsString() {
     return "Comment: " +
-        "id=" + id.toString() + ' ' +
+        "id=" + id + ' ' +
         ", comment=" + comment + ' ' +
         ", book=" + book.getTitle() + '\n';
   }

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("authors")
 public class Author {
   @Id
-  private ObjectId id;
+  private String id;
   @Indexed
   private String name;
   private String comment;
@@ -24,11 +24,11 @@ public class Author {
   }
 
   public String getId() {
-    return id.toString();
+    return id;
   }
 
   public void setId(String id) {
-    this.id = new ObjectId(id);
+    this.id = id;
   }
 
   public String getName() {
@@ -49,7 +49,7 @@ public class Author {
 
   public String getEntityAsString() {
     return "Author: " +
-        "id=" + id.toString() + ' ' +
+        "id=" + id + ' ' +
         ", name=" + name + ' ' +
         ", comment=" + comment + '\n';
   }

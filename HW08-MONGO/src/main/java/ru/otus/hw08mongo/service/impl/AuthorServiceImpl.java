@@ -8,16 +8,21 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw08mongo.exception.AuthorManagementException;
 import ru.otus.hw08mongo.exception.ErrorMessage;
 import ru.otus.hw08mongo.model.Author;
+import ru.otus.hw08mongo.model.Book;
 import ru.otus.hw08mongo.repository.AuthorRepository;
+import ru.otus.hw08mongo.repository.BookRepository;
 import ru.otus.hw08mongo.service.AuthorService;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorRepository authorRepository;
+  private final BookRepository bookRepository;
 
-  public AuthorServiceImpl(AuthorRepository authorRepository) {
+  public AuthorServiceImpl(AuthorRepository authorRepository,
+      BookRepository bookRepository) {
     this.authorRepository = authorRepository;
+    this.bookRepository = bookRepository;
   }
 
   @Override
@@ -40,16 +45,24 @@ public class AuthorServiceImpl implements AuthorService {
 
   @Override
   public void deleteAuthorById(String id) {
+    bookRepository.deleteByAuthorId(id);
     authorRepository.deleteById(id);
   }
 
   @Override
   public void updateAuthor(Author author) {
     authorRepository.save(author);
+    updateAuthorInBooks(author);
+  }
+
+  private void updateAuthorInBooks(Author author) {
+    List<Book> books = bookRepository.findByAuthorId(author.getId());
+    books.stream().forEach(book -> book.setAuthor(author));
+    bookRepository.saveAll(books);
   }
 
   private void checkExistAuthor(Author author) {
-    Author dbAuthor = authorRepository.findByAuthorName(author.getName());
+    Author dbAuthor = authorRepository.findByName(author.getName());
     if (Objects.nonNull(dbAuthor)) {
       throw new AuthorManagementException(ErrorMessage.AUTHOR_ALREADY_EXIST.getMessage());
     }
