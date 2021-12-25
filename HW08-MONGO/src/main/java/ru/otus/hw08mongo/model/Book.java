@@ -38,6 +38,15 @@ public class Book {
     genre.setId(genreId);
   }
 
+  public Book(String id, String title, String annotation, Author author,
+      Genre genre) {
+    this.id = id;
+    this.title = title;
+    this.annotation = annotation;
+    this.author = author;
+    this.genre = genre;
+  }
+
   public Book() {
   }
 

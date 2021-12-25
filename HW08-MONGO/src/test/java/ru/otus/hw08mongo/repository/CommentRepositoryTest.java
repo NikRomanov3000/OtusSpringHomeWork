@@ -13,29 +13,30 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import ru.otus.hw08mongo.model.Comment;
 import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
+import ru.otus.hw08mongo.testchangelog.TestData;
 
-@DisplayName("Book Repository")
+@DisplayName("Comment Repository")
 @DataMongoTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class CommentRepositoryTest {
   @Autowired
   private CommentRepository commentRepository;
 
-  @DisplayName("должен загружать информацию о нужной книге по id")
+  @DisplayName("должен загружать информацию о нужном комментарии по id")
   @Test
   void shouldCorrectlyFindExpectedCommentById() {
     final var actualComment = commentRepository.findById(getCommentIdForTest());
     assertThat(actualComment.get()).usingRecursiveComparison().isEqualTo(getCommentForTest());
   }
 
-  @DisplayName("должен загружать информацию о нужной книге по названию")
+  @DisplayName("должен загружать информацию о комментариях id книги")
   @Test
   void shouldCorrectlyFindExpectedCommentByBookId() {
     final var actualComment = commentRepository.findCommentByBookId(getBookIdForComment());
     assertThat(actualComment.get(0)).usingRecursiveComparison().isEqualTo(getCommentForTest());
   }
 
-  @DisplayName("должен загружать список всех книг")
+  @DisplayName("должен загружать список всех комментариев")
   @Test
   void shouldCorrectlyReturnCorrectCommentList() {
     final int expectedNumberOfComment = 3;
@@ -88,14 +89,14 @@ public class CommentRepositoryTest {
   }
 
   private Comment getCommentForTest() {
-    return DatabaseChangelog.getCommentForTest();
+    return TestData.COMMENT_FOR_TEST;
   }
 
   private String getCommentIdForTest() {
-    return DatabaseChangelog.getCommentForTest().getId();
+    return TestData.COMMENT_FOR_TEST.getId();
   }
 
   private String getBookIdForComment() {
-    return DatabaseChangelog.getCommentForTest().getBook().getId();
+    return TestData.COMMENT_FOR_TEST.getBook().getId();
   }
 }

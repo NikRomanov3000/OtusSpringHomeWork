@@ -34,7 +34,6 @@ public class AuthorServiceTest {
   void shouldInsertAuthor() {
     Author expectedAuthor = getAuthorForTest();
     authorService.addAuthor(expectedAuthor);
-    DatabaseChangelog.getAuthorForTest();
     verify(authorRepository, times(1)).save(expectedAuthor);
   }
 

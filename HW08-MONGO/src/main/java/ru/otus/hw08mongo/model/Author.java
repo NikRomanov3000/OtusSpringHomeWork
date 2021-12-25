@@ -20,6 +20,12 @@ public class Author {
     this.comment = comment;
   }
 
+  public Author(String id, String name, String comment) {
+    this.id = id;
+    this.name = name;
+    this.comment = comment;
+  }
+
   public Author() {
   }
 

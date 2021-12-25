@@ -25,6 +25,12 @@ public class Comment {
     book.setId(bookId);
   }
 
+  public Comment(String id, String comment, Book book) {
+    this.id = id;
+    this.comment = comment;
+    this.book = book;
+  }
+
   public Comment() {
   }
 

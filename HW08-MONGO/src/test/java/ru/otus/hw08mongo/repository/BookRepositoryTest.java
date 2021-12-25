@@ -9,10 +9,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import ru.otus.hw08mongo.model.Book;
 import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
+import ru.otus.hw08mongo.testchangelog.TestData;
 
 @DisplayName("Book Repository")
 @DataMongoTest
@@ -48,8 +50,9 @@ public class BookRepositoryTest {
                         .allMatch(b -> b.getGenre() != null);
   }
 
-  @DisplayName("должен корректно добавлять книгу")
   @Test
+  @DisplayName("должен корректно добавлять книгу")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldInsertBook() {
     Book bookForAdding = new Book("some New Book", "some annotation");
     String id = bookRepository.save(bookForAdding).getId();
@@ -60,8 +63,9 @@ public class BookRepositoryTest {
     assertThat(book.getAnnotation()).isEqualTo(bookForAdding.getAnnotation());
   }
 
-  @DisplayName("должен корректно обнавлять кингу")
   @Test
+  @DisplayName("должен корректно обнавлять кингу")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldUpdateAuthorById() {
     String titleForUpdate = "some title for update";
     Book bookForUpdate = getBookForTest();
@@ -74,8 +78,9 @@ public class BookRepositoryTest {
     assertThat(book.getTitle()).isEqualTo(titleForUpdate);
   }
 
-  @DisplayName("должен корректно удалить книги")
   @Test
+  @DisplayName("должен корректно удалить книги")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldDeleteBookById() {
     bookRepository.deleteById(getBookIdForTest());
 
@@ -84,10 +89,10 @@ public class BookRepositoryTest {
   }
 
   private Book getBookForTest() {
-    return DatabaseChangelog.getBookForTest();
+    return TestData.BOOK_FOR_TEST;
   }
 
   private String getBookIdForTest() {
-    return DatabaseChangelog.getBookForTest().getId();
+    return TestData.BOOK_FOR_TEST.getId();
   }
 }

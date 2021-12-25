@@ -1,7 +1,5 @@
 package ru.otus.hw08mongo.repository;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -9,10 +7,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import ru.otus.hw08mongo.model.Author;
-import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
+import ru.otus.hw08mongo.testchangelog.TestData;
 
 @DisplayName("Author Repository")
 @DataMongoTest
@@ -46,8 +45,9 @@ public class AuthorRepositoryTest {
                           .allMatch(a -> !a.getName().isEmpty());
   }
 
-  @DisplayName("должен корректно удалить автора")
   @Test
+  @DisplayName("должен корректно удалить автора")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldCorrectlyDeleteAuthorById() {
     authorRepository.deleteById(getAuthorIdForTest());
 
@@ -55,8 +55,9 @@ public class AuthorRepositoryTest {
     assertThat(author).isNull();
   }
 
-  @DisplayName("должен корректно добавлять автора")
   @Test
+  @DisplayName("должен корректно добавлять автора")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldInsertAuthor() {
     String authorName = "some New Author";
     String authorComment = "some comment for author";
@@ -69,8 +70,9 @@ public class AuthorRepositoryTest {
     assertThat(author.getComment()).isEqualTo(authorComment);
   }
 
-  @DisplayName("должен корректно обнавлять автора")
   @Test
+  @DisplayName("должен корректно обнавлять автора")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldCorrectlyUpdateAuthorById() {
     String nameForUpdate = "some name for update";
     Author authorForUpdate = getAuthorForTest();
@@ -84,10 +86,10 @@ public class AuthorRepositoryTest {
   }
 
   private Author getAuthorForTest() {
-    return DatabaseChangelog.getAuthorForTest();
+    return TestData.AUTHOR_FOR_TEST;
   }
 
   private String getAuthorIdForTest() {
-    return DatabaseChangelog.getAuthorForTest().getId();
+    return TestData.AUTHOR_FOR_TEST.getId();
   }
 }
