@@ -68,7 +68,7 @@ public class GenreServiceTest {
     verify(genreRepository, times(1)).deleteById(TEST_GENRE_ID);
   }
 
-  @DisplayName("удаляем жанр по id")
+  @DisplayName("обновляем жанр по id")
   @Test
   void shouldCorrectUpdateGenre() {
     Genre testGenre = getTestGenre();

@@ -1,9 +1,7 @@
 package ru.otus.hw08mongo.repository;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -15,7 +13,6 @@ import ru.otus.hw08mongo.testchangelog.TestData;
 
 @DisplayName("Author Repository")
 @DataMongoTest
-@TestMethodOrder(MethodOrderer.MethodName.class)
 public class AuthorRepositoryTest {
   @Autowired
   private AuthorRepository authorRepository;
@@ -25,8 +22,8 @@ public class AuthorRepositoryTest {
   @DisplayName("должен загружать информацию о нужном авторе по его id")
   @Test
   void shouldFindExpectedAuthorById() {
-    final var actualAuthor = authorRepository.findById(getAuthorIdForTest()).get();
-    assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(getAuthorForTest());
+    final var actualAuthor = authorRepository.findById(getAuthorIdForTest());
+    assertThat(actualAuthor).get().usingRecursiveComparison().isEqualTo(getAuthorForTest());
   }
 
   @DisplayName("должен загружать информацию о нужном авторе по его имени")

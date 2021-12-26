@@ -24,7 +24,7 @@ public class GenreRepositoryTest {
   @Test
   void shouldFindExpectedGenreById() {
     final var actualGenre = genreRepository.findById(getGenreIdForTest());
-    assertThat(actualGenre.get()).usingRecursiveComparison().isEqualTo(getGenreForTest());
+    assertThat(actualGenre).get().usingRecursiveComparison().isEqualTo(getGenreForTest());
   }
 
   @DisplayName("должен загружать информацию о нужном жанре по его имени")

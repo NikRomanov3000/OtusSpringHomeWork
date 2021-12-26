@@ -4,20 +4,17 @@ import java.util.Optional;
 
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import ru.otus.hw08mongo.model.Comment;
-import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
 import ru.otus.hw08mongo.testchangelog.TestData;
 
 @DisplayName("Comment Repository")
 @DataMongoTest
-@TestMethodOrder(MethodOrderer.MethodName.class)
 public class CommentRepositoryTest {
   @Autowired
   private CommentRepository commentRepository;
@@ -26,7 +23,7 @@ public class CommentRepositoryTest {
   @Test
   void shouldCorrectlyFindExpectedCommentById() {
     final var actualComment = commentRepository.findById(getCommentIdForTest());
-    assertThat(actualComment.get()).usingRecursiveComparison().isEqualTo(getCommentForTest());
+    assertThat(actualComment).get().usingRecursiveComparison().isEqualTo(getCommentForTest());
   }
 
   @DisplayName("должен загружать информацию о комментариях id книги")
@@ -46,8 +43,9 @@ public class CommentRepositoryTest {
                                .allMatch(b -> b.getBook() != null);
   }
 
-  @DisplayName("должен корректно добавлять комментарий")
   @Test
+  @DisplayName("должен корректно добавлять комментарий")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldInsertComment() {
     Comment commentForAdding = new Comment("some comment for adding", getBookIdForComment());
     String id = commentRepository.save(commentForAdding).getId();
@@ -80,8 +78,9 @@ public class CommentRepositoryTest {
                            .allMatch(с -> !с.getComment().isEmpty());
   }
 
-  @DisplayName("должен корректно удалять комментарий")
   @Test
+  @DisplayName("должен корректно удалять комментарий")
+  @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
   void shouldDeleteCommentById() {
     commentRepository.deleteById(getCommentIdForTest());
     Optional<Comment> comment = commentRepository.findById(getCommentIdForTest());

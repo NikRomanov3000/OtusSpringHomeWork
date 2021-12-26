@@ -1,11 +1,7 @@
 package ru.otus.hw08mongo.repository;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -13,12 +9,10 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import ru.otus.hw08mongo.model.Book;
-import ru.otus.hw08mongo.testchangelog.DatabaseChangelog;
 import ru.otus.hw08mongo.testchangelog.TestData;
 
 @DisplayName("Book Repository")
 @DataMongoTest
-@TestMethodOrder(MethodOrderer.MethodName.class)
 public class BookRepositoryTest {
   @Autowired
   private BookRepository bookRepository;
@@ -29,7 +23,7 @@ public class BookRepositoryTest {
   @Test
   void shouldCorrectlyFindExpectedBookById() {
     final var actualBook = bookRepository.findById(getBookIdForTest());
-    assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(getBookForTest());
+    assertThat(actualBook).get().usingRecursiveComparison().isEqualTo(getBookForTest());
   }
 
   @DisplayName("должен загружать информацию о нужной книге по названию")
