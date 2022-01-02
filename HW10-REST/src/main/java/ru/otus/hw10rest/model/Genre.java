@@ -62,6 +62,13 @@ public class Genre {
     this.description = description;
   }
 
+  public String getEntityAsString(){
+    return "Genre: " +
+        "id=" + id + ' ' +
+        ", name=" + name + ' ' +
+        ", description=" + description + '\n' ;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

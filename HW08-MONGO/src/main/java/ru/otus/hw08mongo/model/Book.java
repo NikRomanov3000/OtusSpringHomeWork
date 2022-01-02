@@ -11,9 +11,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("books")
 public class Book {
   @Id
+<<<<<<< HEAD
   private String id;
   private String title;
   private String annotation;
+=======
+  private ObjectId id;
+  private String title;
+  private String annotation;
+  @Transient
+  private String authorId;
+  @Transient
+  private String genreId;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   private Author author;
   private Genre genre;
 
@@ -32,6 +42,7 @@ public class Book {
   public Book(String title, String annotation, String authorId, String genreId) {
     this.title = title;
     this.annotation = annotation;
+<<<<<<< HEAD
     this.author = new Author();
     this.genre = new Genre();
     author.setId(authorId);
@@ -45,12 +56,20 @@ public class Book {
     this.annotation = annotation;
     this.author = author;
     this.genre = genre;
+=======
+    this.authorId = authorId;
+    this.genreId = genreId;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   public Book() {
   }
 
+<<<<<<< HEAD
   public String getId() {
+=======
+  public ObjectId getId() {
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
     return id;
   }
 
@@ -71,6 +90,7 @@ public class Book {
   }
 
   public void setId(String id) {
+<<<<<<< HEAD
     this.id = id;
   }
 
@@ -92,6 +112,25 @@ public class Book {
     if (Objects.nonNull(genre)) {
       genre.setId(genreId);
     }
+=======
+    this.id = new ObjectId(id);
+  }
+
+  public String getAuthorId() {
+    return authorId;
+  }
+
+  public void setAuthorId(String authorId) {
+    this.authorId = authorId;
+  }
+
+  public String getGenreId() {
+    return genreId;
+  }
+
+  public void setGenreId(String genreId) {
+    this.genreId = genreId;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   public Author getAuthor() {
@@ -112,7 +151,11 @@ public class Book {
 
   public String getEntityAsString() {
     return "Book: " +
+<<<<<<< HEAD
         "id=" + id + ' ' +
+=======
+        "id=" + id.toString() + ' ' +
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
         ", title=" + title + ' ' +
         ", annotation=" + annotation +
         ", author=" + getAuthorName() + ' ' +

@@ -2,8 +2,11 @@ server:
   port: 8080
 
 spring:
+<<<<<<< HEAD
   main:
     allow-circular-references: true
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   data:
     mongodb:
       database: library

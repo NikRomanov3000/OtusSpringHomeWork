@@ -13,14 +13,24 @@ import ru.otus.hw08mongo.repository.BookRepository;
 import ru.otus.hw08mongo.repository.CommentRepository;
 import ru.otus.hw08mongo.repository.GenreRepository;
 
+<<<<<<< HEAD
 @ChangeLog(order = "001")
 public class DatabaseChangelog {
   @ChangeSet(order = "000", id = "dropDb", author = "n.romanov", runAlways = true)
+=======
+@ChangeLog
+public class DatabaseChangelog {
+  @ChangeSet(order = "001", id = "dropDb", author = "n.romanov", runAlways = true)
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   public void dropDb(MongoDatabase db) {
     db.drop();
   }
 
+<<<<<<< HEAD
   @ChangeSet(order = "001", id = "insertData", author = "n.romanov")
+=======
+  @ChangeSet(order = "002", id = "insertData", author = "n.romanov")
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   public void insertData(AuthorRepository authorRepository, GenreRepository genreRepository,
       BookRepository bookRepository, CommentRepository commentRepository) {
     Author authorOne = authorRepository.save(new Author("Alexander Pushkin", "best russian poet"));

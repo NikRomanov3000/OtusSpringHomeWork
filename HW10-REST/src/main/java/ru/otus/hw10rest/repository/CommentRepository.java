@@ -16,6 +16,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
   List<Comment> findCommentByBookId(long bookId);
 
   boolean existsByBookId(long bookId);
-
-  void deleteByBookId(long bookId);
 }

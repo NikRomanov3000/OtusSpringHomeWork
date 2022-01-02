@@ -119,6 +119,15 @@ public class Book {
     this.comments = comment;
   }
 
+  public String getEntityAsString(){
+    return "Book: " +
+        "id=" + id + ' ' +
+        ", title=" + title + ' ' +
+        ", annotation=" + annotation +
+        ", author=" + getAuthorName() + ' ' +
+        ", genre=" + getGenreName() + '\n';
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
