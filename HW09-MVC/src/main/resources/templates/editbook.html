@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Book edition -->
+<form id="edit-form" th:action="@{/book}" th:method="post" action="editbook.html">
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="${book.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Title:</label>
+        <input id="name-input" name="title" type="text" th:value="${book.title}"/>
+    </div>
+
+    <div class="row">
+        <label for="comment-input">Annotation:</label>
+        <input id="comment-input" name="annotation" type="text" th:value="${book.annotation}"/>
+    </div>
+
+    <div class="row">
+        <label for="authorid-input">AuthorId:</label>
+        <input id="authorid-input" name="authorId" type="text" th:value="${book.author.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="genreid-input">GenreId:</label>
+        <input id="genreid-input" name="genreId" type="text" th:value="${book.genre.id}"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+</body>
+</html>
