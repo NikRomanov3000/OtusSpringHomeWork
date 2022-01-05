@@ -49,10 +49,10 @@ public class BookServiceImpl implements BookService {
   public Book addBook(Book book, long authorId, long genreId) {
     Author author = authorRepository.findById(authorId);
     Genre genre = genreRepository.findById(genreId);
-    if(Objects.nonNull(author)){
+    if (Objects.nonNull(author)) {
       book.setAuthor(author);
     }
-    if(Objects.nonNull(genre)){
+    if (Objects.nonNull(genre)) {
       book.setGenre(genre);
     }
 
@@ -62,6 +62,14 @@ public class BookServiceImpl implements BookService {
   @Override
   @Transactional
   public Book addBook(Book book) {
+    Author author = authorRepository.findById(book.getAuthor().getId().longValue());
+    Genre genre = genreRepository.findById(book.getGenre().getId().longValue());
+    if (Objects.nonNull(author)) {
+      book.setAuthor(author);
+    }
+    if (Objects.nonNull(genre)) {
+      book.setGenre(genre);
+    }
     return bookRepository.save(book);
   }
 
