@@ -26,7 +26,7 @@
 <body>
 
 <!-- Book add -->
-<form id="edit-form" th:action="@{/book}" th:method="post" action="addbook.html">
+<form id="edit-form" th:action="@{/addbook}" th:method="post" action="addbook.html">
     <h1>Add Book Info:</h1>
 
     <div class="row">
@@ -39,14 +39,18 @@
         <input id="annotation-input" name="annotation" type="text"/>
     </div>
 
-    <div class="row">
-        <label for="authorid-input">AuthorId:</label>
-        <input id="authorid-input" name="authorId" type="text"/>
+    <div class="form-group blu-margin">
+        <label>Author:</label>
+        <select class="form-control" th:name="author.id" id="authorId">
+            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+        </select>
     </div>
 
-    <div class="row">
-        <label for="genreid-input">GenreId:</label>
-        <input id="genreid-input" name="genreId" type="text"/>
+    <div class="form-group blu-margin">
+        <label>Genre:</label>
+        <select class="form-control" th:name="genre.id"  id="genreId">
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+        </select>
     </div>
 
     <div class="row">
