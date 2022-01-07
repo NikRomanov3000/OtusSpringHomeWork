@@ -36,7 +36,7 @@ public class BookControllerTest {
   @MockBean
   private GenreService genreService;
 
-  private final long TEST_BOOK_ID = 1L;
+  private final static long TEST_BOOK_ID = 1L;
 
   @DisplayName("Получение страницы со списком книг")
   @Test
