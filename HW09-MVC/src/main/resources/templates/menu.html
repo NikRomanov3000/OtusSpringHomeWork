@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Menu</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        .genres, .genres td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Menu:</h1>
+<table class="menu">
+    <thead>
+    <tr>
+        <th>Genres</th>
+        <th>Authors</th>
+        <th>Books</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <a th:href="@{genre}" href="genrelist.html">Genres</a>
+        </td>
+        <td>
+            <a th:href="@{author}" href="authorlist.html">Author</a>
+        </td>
+        <td>
+            <a th:href="@{book}" href="booklist.html">Book</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

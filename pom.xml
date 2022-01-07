@@ -22,6 +22,10 @@
         <module>HW06-ORM</module>
         <module>HW07-DATA</module>
         <module>HW08-MONGO</module>
+        <module>HW09-MVC</module>
+        <module>HW10-REST</module>
+        <module>HW09-MVC</module>
+        <module>HW10-REST</module>
     </modules>
 
     <properties>

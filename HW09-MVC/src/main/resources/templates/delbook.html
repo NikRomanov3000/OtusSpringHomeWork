@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Genre delete -->
+<form id="delete-form" th:action="@{/book(id=${book.id})}" th:method="delete" action="delbook.html">
+    <input type="hidden" name="_method" value="delete" />
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="${book.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Title:</label>
+        <input id="name-input" name="name" type="text" readonly="readonly" th:value="${book.title}"/>
+    </div>
+
+    <div class="row">
+        <label for="annotation-input">Annotation:</label>
+        <input id="annotation-input" name="comment" type="text" readonly="readonly" th:value="${book.annotation}"/>
+    </div>
+
+    <div class="row">
+        <label for="author-input">Author:</label>
+        <input id="author-input" name="author" type="text" readonly="readonly" th:value="${book.author.name}"/>
+    </div>
+
+    <div class="row">
+        <label for="genre-input">Genre:</label>
+        <input id="genre-input" name="genre" type="text" readonly="readonly" th:value="${book.genre.name}"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Delete</button>
+    </div>
+</form>
+
+</body>
+</html>

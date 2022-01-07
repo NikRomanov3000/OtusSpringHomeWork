@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit author</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Genre delete -->
+<form id="delete-form" th:action="@{/authorsbooks(id=${author.id})}" th:method="delete" action="delauthor.html">
+    <input type="hidden" name="_method" value="delete" />
+    <h1>Author Info:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="${author.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Name:</label>
+        <input id="name-input" name="name" type="text" readonly="readonly" th:value="${author.name}"/>
+    </div>
+
+    <div class="row">
+        <label for="comment-input">Comment:</label>
+        <input id="comment-input" name="comment" type="text" readonly="readonly" th:value="${author.comment}"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Delete</button>
+    </div>
+</form>
+
+</body>
+</html>
