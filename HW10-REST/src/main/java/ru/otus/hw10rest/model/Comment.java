@@ -13,6 +13,8 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "comment")
 public class Comment {
@@ -24,6 +26,7 @@ public class Comment {
 
   @ManyToOne(targetEntity = Book.class, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   @JoinColumn(name = "r_book_id")
+  @JsonIgnore
   private Book book;
 
   public Comment(long id, String comment, Book book) {
@@ -62,12 +65,5 @@ public class Comment {
 
   public void setBook(Book book) {
     this.book = book;
-  }
-
-  public String getEntityAsString(){
-    return "Comment: " +
-        "id=" + id + ' ' +
-        ", comment=" + comment + ' ' +
-        ", book=" + book.getTitle() + '\n';
   }
 }

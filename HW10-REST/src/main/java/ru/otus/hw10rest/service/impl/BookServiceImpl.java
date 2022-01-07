@@ -55,4 +55,11 @@ public class BookServiceImpl implements BookService {
       throw new BookReferenceException("Book has comments, please delete all comments firstly!");
     }
   }
+
+  @Override
+  @Transactional
+  public void deleteBookWithComments(long id) {
+    commentRepository.deleteByBookId(id);
+    bookRepository.deleteById(id);
+  }
 }

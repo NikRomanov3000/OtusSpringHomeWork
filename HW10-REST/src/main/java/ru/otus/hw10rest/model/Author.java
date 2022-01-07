@@ -62,13 +62,6 @@ public class Author {
     this.comment = comment;
   }
 
-  public String getEntityAsString() {
-    return "Author: " +
-        "id=" + id + ' ' +
-        ", name=" + name + ' ' +
-        ", comment=" + comment + '\n';
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {

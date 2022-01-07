@@ -1,4 +1,4 @@
-package ru.otus.hw10rest.controller;
+package ru.otus.hw10rest.controller.rest;
 
 import java.util.List;
 
