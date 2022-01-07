@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-circular-references: true
+  data:
+    mongodb:
+      database: library
+
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw08mongo.changelog
