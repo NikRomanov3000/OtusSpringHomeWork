@@ -48,10 +48,10 @@
                         <td>${book.author.name}</td>
                         <td>${book.genre.name}</td>
                         <td>
-                            <a th:href="@{book/editbook(id=${book.id})}" href="editbook.html">Edit</a>
+                             <a href="book/editbook?id=${book.id}">Edit</a>
                          </td>
                         <td>
-                            <a th:href="@{book/delbook(id=${book.id})}" href="delbook.html">Delete</a>
+                             <a href="book/delbook?id=${book.id}">Delete</a>
                         </td>
                     </tr>
                 `)
