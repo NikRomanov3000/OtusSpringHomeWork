@@ -26,7 +26,8 @@
 <body>
 
 <!-- Book edition -->
-<form id="edit-form" th:action="@{/addbook}" th:method="post" action="editbook.html">
+<form id="edit-form">
+    <input type="hidden" name="_method"/>
     <h1>Book Info:</h1>
 
     <div class="row">
@@ -35,33 +36,63 @@
     </div>
 
     <div class="row">
-        <label for="name-input">Title:</label>
-        <input id="name-input" name="title" type="text" th:value="${book.title}"/>
+        <label for="title-input">Title:</label>
+        <input id="title-input" name="title" type="text" th:value="${book.title}"/>
     </div>
 
     <div class="row">
-        <label for="comment-input">Annotation:</label>
-        <input id="comment-input" name="annotation" type="text" th:value="${book.annotation}"/>
+        <label for="annotation-input">Annotation:</label>
+        <input id="annotation-input" name="annotation" type="text" th:value="${book.annotation}"/>
     </div>
 
     <div class="form-group blu-margin">
         <label>Author:</label>
         <select class="form-control" th:name="authorId" th:field="${book.author.id}" id="authorId">
-            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+            <option th:each="author : ${authors}" th:value="${author.id}"
+                    th:text="${author.name}"></option>
         </select>
     </div>
 
     <div class="form-group blu-margin">
         <label>Genre:</label>
         <select class="form-control" th:name="genreId" th:field="${book.genre.id}" id="genreId">
-            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+            <option th:each="genre : ${genres}" th:value="${genre.id}"
+                    th:text="${genre.name}"></option>
         </select>
     </div>
 
     <div class="row">
-        <button type="submit">Save</button>
+        <a>
+            <button type="submit" onclick="update_book(build_book_obj(), ${book.id})">Save</button>
+        </a>
     </div>
 </form>
+
+<script th:inline="javascript">
+    function build_book_obj() {
+        console.log("exec build_book_obj");
+        var obj = new Object();
+        obj.title =  document.getElementById("title-input").value;
+        obj.annotation = document.getElementById("annotation-input").value;
+        obj.authorId =  document.getElementById("authorId").value;
+        obj.genreId = document.getElementById("genreId").value;
+        console.log("exec build_book_obj result: " + obj);
+        return obj;
+    }
+</script>
+<script th:inline="javascript">
+    function update_book(book, bookId) {
+        console.log("exec update_book");
+        console.log("exec update_book with param:" + JSON.stringify(book));
+        $.ajax({
+            url: '/api/book/' + bookId,
+            type: 'PUT',
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(book)
+        });
+    };
+</script>
 
 </body>
 </html>

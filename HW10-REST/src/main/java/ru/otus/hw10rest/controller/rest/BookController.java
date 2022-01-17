@@ -38,8 +38,9 @@ public class BookController {
     bookService.addBook(book);
   }
 
-  @PutMapping({ "/book" })
-  public void updateBook(@RequestBody Book book) {
+  @PutMapping({ "/book/{bookId}" })
+  public void updateBook(@PathVariable Long bookId, @RequestBody Book book) {
+    book.setId(bookId);
     bookService.updateBook(book);
   }
 
