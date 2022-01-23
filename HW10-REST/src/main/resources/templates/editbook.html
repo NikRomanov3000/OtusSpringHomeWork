@@ -65,7 +65,7 @@
 
     <div class="row">
         <a>
-            <button th:attr="onclick=|update_book(build_book_obj(), ${book.id})|">Save</button>
+            <button type="button" th:attr="onclick=|update_book(build_book_obj(), ${book.id})|">Save</button>
         </a>
     </div>
 </form>
@@ -93,16 +93,8 @@
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify(book),
-            success: function (data, textStatus) {
-                location.href("/book");
-            }
-        }).done(
-            function() {
-                console.log("redirect to list of books");
-                location.href("/book");
-            }
-        );
-        location.href("/book");
+        });
+        location.href ="/book";
     };
 </script>
 </body>

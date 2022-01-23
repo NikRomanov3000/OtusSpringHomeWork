@@ -36,12 +36,6 @@ public class BookPageController {
     return "booklist";
   }
 
-  @PostMapping({ "/addbook" })
-  public String addBook(Book book, Model model) {
-
-    return "redirect:/book";
-  }
-
   @GetMapping({ "/book/editbook" })
   public String editPageBook(@RequestParam("id") long id, Model model) throws NotActiveException {
     Book book = bookService.getBookById(id);
@@ -63,21 +57,5 @@ public class BookPageController {
     model.addAttribute("authors", authors);
     model.addAttribute("genres", genres);
     return "addbook";
-  }
-
-  @GetMapping({ "/book/delbook" })
-  public String delPageBook(@RequestParam("id") long id, Model model) throws NotActiveException {
-    Book book = bookService.getBookById(id);
-    if (Objects.isNull(book)) {
-      throw new NotActiveException();
-    }
-    model.addAttribute("book", book);
-    return "delbook";
-  }
-
-  @DeleteMapping({ "/book" })
-  public String deleteBookWithCommentsById(@RequestParam("id") long id) {
-    bookService.deleteBookWithComments(id);
-    return "redirect:/book";
   }
 }
