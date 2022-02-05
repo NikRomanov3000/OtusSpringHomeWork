@@ -14,7 +14,10 @@ import ru.otus.hw08mongo.model.Book;
 import ru.otus.hw08mongo.model.Genre;
 import ru.otus.hw08mongo.repository.AuthorRepository;
 import ru.otus.hw08mongo.repository.BookRepository;
+<<<<<<< HEAD
 import ru.otus.hw08mongo.repository.CommentRepository;
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
 import ru.otus.hw08mongo.repository.GenreRepository;
 import ru.otus.hw08mongo.service.BookService;
 
@@ -23,6 +26,7 @@ public class BookServiceImpl implements BookService {
   private final BookRepository bookRepository;
   private final GenreRepository genreRepository;
   private final AuthorRepository authorRepository;
+<<<<<<< HEAD
   private final CommentRepository commentRepository;
 
   public BookServiceImpl(BookRepository bookRepository,
@@ -33,6 +37,15 @@ public class BookServiceImpl implements BookService {
     this.genreRepository = genreRepository;
     this.authorRepository = authorRepository;
     this.commentRepository = commentRepository;
+=======
+
+  public BookServiceImpl(BookRepository bookRepository,
+      GenreRepository genreRepository,
+      AuthorRepository authorRepository) {
+    this.bookRepository = bookRepository;
+    this.genreRepository = genreRepository;
+    this.authorRepository = authorRepository;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   @Override
@@ -62,26 +75,41 @@ public class BookServiceImpl implements BookService {
 
   @Override
   public void deleteBookById(String id) {
+<<<<<<< HEAD
     commentRepository.deleteByBookId(id);
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
     bookRepository.deleteById(id);
   }
 
   private void checkExistBook(Book book) {
+<<<<<<< HEAD
     Book dbBook = bookRepository.findByTitle(book.getTitle());
+=======
+    Book dbBook = bookRepository.findByBookTitle(book.getTitle());
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
     if (Objects.nonNull(dbBook)) {
       throw new BookManagementException(ErrorMessage.BOOK_ALREADY_EXIST.getMessage());
     }
   }
 
   private void setAuthorToBook(Book book) {
+<<<<<<< HEAD
     if (!Objects.isNull(book.getAuthor()) && Strings.isNotBlank(book.getAuthorId())) {
+=======
+    if (Strings.isNotBlank(book.getAuthorId())) {
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
       Optional<Author> optionalAuthor = authorRepository.findById(book.getAuthorId());
       optionalAuthor.ifPresent(author -> book.setAuthor(author));
     }
   }
 
   private void setGenreToBook(Book book) {
+<<<<<<< HEAD
     if (!Objects.isNull(book.getGenre()) && Strings.isNotBlank(book.getGenreId())) {
+=======
+    if (Strings.isNotBlank(book.getGenreId())) {
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
       Optional<Genre> optionalGenre = genreRepository.findById(book.getGenreId());
       optionalGenre.ifPresent(genre -> book.setGenre(genre));
     }

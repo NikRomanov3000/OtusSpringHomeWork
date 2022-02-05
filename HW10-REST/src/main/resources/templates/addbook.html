@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add book</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- Book add -->
+<form id="add-form">
+    <h1>Add Book Info:</h1>
+
+    <div class="row">
+        <label for="title-input">Title:</label>
+        <input id="title-input" name="title" type="text"/>
+    </div>
+
+    <div class="row">
+        <label for="annotation-input">Annotation:</label>
+        <input id="annotation-input" name="annotation" type="text"/>
+    </div>
+
+    <div class="form-group blu-margin">
+        <label>Author:</label>
+        <select class="form-control" th:name="authorId" id="authorId">
+            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+        </select>
+    </div>
+
+    <div class="form-group blu-margin">
+        <label>Genre:</label>
+        <select class="form-control" th:name="genreId"  id="genreId">
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="button" th:attr="onclick=|add_book(build_book_obj())|">Save</button>
+    </div>
+</form>
+<script>
+    function build_book_obj() {
+        console.log("exec build_book_obj");
+        var obj = new Object();
+        obj.title = document.getElementById("title-input").value;
+        obj.annotation = document.getElementById("annotation-input").value;
+        obj.author = {id: document.getElementById("authorId").value};
+        obj.genre = {id: document.getElementById("genreId").value};
+
+        console.log("exec build_book_obj result: " + obj);
+        return obj;
+    }
+</script>
+<script>
+    function add_book(book) {
+        console.log("exec update_book");
+        console.log("exec update_book with param:" + JSON.stringify(book));
+        $.ajax({
+            url: '/api/book/',
+            type: 'POST',
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(book),
+        });
+        location.href ="/book";
+    };
+</script>
+</body>
+</html>

@@ -10,7 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("genres")
 public class Genre {
   @Id
+<<<<<<< HEAD
   private String id;
+=======
+  private ObjectId id;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   @Indexed
   private String name;
   private String description;
@@ -20,21 +24,32 @@ public class Genre {
     this.description = description;
   }
 
+<<<<<<< HEAD
   public Genre(String id, String name, String description) {
     this.id = id;
     this.name = name;
     this.description = description;
   }
 
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   public Genre() {
   }
 
   public String getId() {
+<<<<<<< HEAD
     return id;
   }
 
   public void setId(String id) {
     this.id = id;
+=======
+    return id.toString();
+  }
+
+  public void setId(String id) {
+    this.id = new ObjectId(id);
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   public String getName() {
@@ -53,11 +68,19 @@ public class Genre {
     this.description = description;
   }
 
+<<<<<<< HEAD
   public String getEntityAsString() {
     return "Genre: " +
         "id=" + id + ' ' +
         ", name=" + name + ' ' +
         ", description=" + description + '\n';
+=======
+  public String getEntityAsString(){
+    return "Genre: " +
+        "id=" + id + ' ' +
+        ", name=" + name + ' ' +
+        ", description=" + description + '\n' ;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   @Override

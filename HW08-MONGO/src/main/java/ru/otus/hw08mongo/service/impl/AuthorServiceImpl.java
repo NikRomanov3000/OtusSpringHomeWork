@@ -8,21 +8,31 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw08mongo.exception.AuthorManagementException;
 import ru.otus.hw08mongo.exception.ErrorMessage;
 import ru.otus.hw08mongo.model.Author;
+<<<<<<< HEAD
 import ru.otus.hw08mongo.model.Book;
 import ru.otus.hw08mongo.repository.AuthorRepository;
 import ru.otus.hw08mongo.repository.BookRepository;
+=======
+import ru.otus.hw08mongo.repository.AuthorRepository;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
 import ru.otus.hw08mongo.service.AuthorService;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorRepository authorRepository;
+<<<<<<< HEAD
   private final BookRepository bookRepository;
 
   public AuthorServiceImpl(AuthorRepository authorRepository,
       BookRepository bookRepository) {
     this.authorRepository = authorRepository;
     this.bookRepository = bookRepository;
+=======
+
+  public AuthorServiceImpl(AuthorRepository authorRepository) {
+    this.authorRepository = authorRepository;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   @Override
@@ -45,13 +55,17 @@ public class AuthorServiceImpl implements AuthorService {
 
   @Override
   public void deleteAuthorById(String id) {
+<<<<<<< HEAD
     bookRepository.deleteByAuthorId(id);
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
     authorRepository.deleteById(id);
   }
 
   @Override
   public void updateAuthor(Author author) {
     authorRepository.save(author);
+<<<<<<< HEAD
     updateAuthorInBooks(author);
   }
 
@@ -63,6 +77,12 @@ public class AuthorServiceImpl implements AuthorService {
 
   private void checkExistAuthor(Author author) {
     Author dbAuthor = authorRepository.findByName(author.getName());
+=======
+  }
+
+  private void checkExistAuthor(Author author) {
+    Author dbAuthor = authorRepository.findByAuthorName(author.getName());
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
     if (Objects.nonNull(dbAuthor)) {
       throw new AuthorManagementException(ErrorMessage.AUTHOR_ALREADY_EXIST.getMessage());
     }

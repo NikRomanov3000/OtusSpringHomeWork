@@ -10,7 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("authors")
 public class Author {
   @Id
+<<<<<<< HEAD
   private String id;
+=======
+  private ObjectId id;
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   @Indexed
   private String name;
   private String comment;
@@ -20,21 +24,32 @@ public class Author {
     this.comment = comment;
   }
 
+<<<<<<< HEAD
   public Author(String id, String name, String comment) {
     this.id = id;
     this.name = name;
     this.comment = comment;
   }
 
+=======
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   public Author() {
   }
 
   public String getId() {
+<<<<<<< HEAD
     return id;
   }
 
   public void setId(String id) {
     this.id = id;
+=======
+    return id.toString();
+  }
+
+  public void setId(String id) {
+    this.id = new ObjectId(id);
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
   }
 
   public String getName() {
@@ -55,7 +70,11 @@ public class Author {
 
   public String getEntityAsString() {
     return "Author: " +
+<<<<<<< HEAD
         "id=" + id + ' ' +
+=======
+        "id=" + id.toString() + ' ' +
+>>>>>>> 3ce69a9... HW08-MONGO init commit without test
         ", name=" + name + ' ' +
         ", comment=" + comment + '\n';
   }
