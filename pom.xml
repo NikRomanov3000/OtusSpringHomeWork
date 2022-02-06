@@ -24,6 +24,7 @@
         <module>HW08-MONGO</module>
         <module>HW09-MVC</module>
         <module>HW10-REST</module>
+        <module>HW12-SecurityFormBased</module>
     </modules>
 
     <properties>
