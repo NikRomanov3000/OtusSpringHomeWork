@@ -1,8 +1,11 @@
 package ru.otus.hw11webflux.strategy.impl;
 
+import org.springframework.stereotype.Component;
+
 import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.strategy.DeleteEntityStrategy;
 
+@Component
 public class DeleteCommentByBookAuthorId implements DeleteEntityStrategy {
 
   private final CommentRepository commentRepository;
