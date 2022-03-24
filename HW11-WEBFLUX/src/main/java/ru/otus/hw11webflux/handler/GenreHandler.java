@@ -16,27 +16,37 @@ import reactor.core.publisher.Mono;
 import ru.otus.hw11webflux.exception.BadRequestException;
 import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.model.Genre;
+import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.repository.GenreRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
 public class GenreHandler {
   private final FieldValidator validator;
   private final GenreRepository genreRepository;
+  private final BookRepository bookRepository;
+  private final CommentRepository commentRepository;
 
-  public GenreHandler(final FieldValidator validator, final GenreRepository genreRepository) {
+  public GenreHandler(final FieldValidator validator, final GenreRepository genreRepository,
+      BookRepository bookRepository,
+      CommentRepository commentRepository) {
     this.validator = validator;
     this.genreRepository = genreRepository;
+    this.bookRepository = bookRepository;
+    this.commentRepository = commentRepository;
   }
 
   public Mono<ServerResponse> create(final ServerRequest request) {
     return request.bodyToMono(Genre.class)
                   .doOnNext(this::checkGenre)
                   .flatMap(genreRepository::save)
-                  .flatMap(genre -> created(request.uri()).contentType(APPLICATION_JSON).bodyValue(genre))
+                  .flatMap(genre -> created(request.uri()).contentType(APPLICATION_JSON).bodyValue(
+                      genre))
                   .onErrorResume(BadRequestException.class,
                                  error -> badRequest()
                                      .contentType(APPLICATION_JSON)
-                                     .bodyValue(new ErrorResponse(BAD_REQUEST.value(), error.getMessage()))
+                                     .bodyValue(
+                                         new ErrorResponse(BAD_REQUEST.value(), error.getMessage()))
                   );
   }
 
@@ -59,16 +69,20 @@ public class GenreHandler {
     return request.bodyToMono(Genre.class)
                   .doOnNext(this::checkGenre)
                   .flatMap(genreRepository::save)
+                  .doOnNext(this::onAfterSave)
                   .flatMap(genre -> noContent().build())
                   .onErrorResume(BadRequestException.class,
                                  error -> badRequest()
                                      .contentType(APPLICATION_JSON)
-                                     .bodyValue(new ErrorResponse(BAD_REQUEST.value(), error.getMessage()))
+                                     .bodyValue(
+                                         new ErrorResponse(BAD_REQUEST.value(), error.getMessage()))
                   );
   }
 
   public Mono<ServerResponse> delete(final ServerRequest request) {
-    return genreRepository.deleteById(request.pathVariable("id"))
+    String genreId = request.pathVariable("id");
+    return genreRepository.deleteById(genreId)
+                          .then(onAfterDelete(genreId))
                           .then(noContent().build());
   }
 
@@ -76,5 +90,18 @@ public class GenreHandler {
     if (validator.validate(genre).hasErrors()) {
       throw new BadRequestException("invalid genre fields!");
     }
+  }
+
+  public Mono<Void> onAfterDelete(String genreId) {
+    return commentRepository.deleteAllByBook_Genre_Id(genreId)
+                            .then(bookRepository.deleteAllByGenre_Id(genreId));
+  }
+
+  public void onAfterSave(Genre genre) {
+    bookRepository.findAllByGenre_Id(genre.getId())
+                  .doOnNext(book -> book.setGenre(genre))
+                  .collectList()
+                  .doOnNext(bookRepository::saveAll)
+                  .subscribe();
   }
 }

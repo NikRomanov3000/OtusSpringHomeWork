@@ -2,6 +2,7 @@ package ru.otus.hw11webflux.handler;
 
 import java.util.Comparator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -17,15 +18,24 @@ import ru.otus.hw11webflux.exception.BadRequestException;
 import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.model.Author;
 import ru.otus.hw11webflux.repository.AuthorRepository;
+import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
+@Component
 public class AuthorHandler {
   private final FieldValidator validator;
   private final AuthorRepository authorRepository;
+  private final BookRepository bookRepository;
+  private final CommentRepository commentRepository;
 
-  public AuthorHandler(final FieldValidator validator, final AuthorRepository authorsRepository) {
+  public AuthorHandler(final FieldValidator validator, final AuthorRepository authorsRepository,
+      BookRepository bookRepository,
+      CommentRepository commentRepository) {
     this.validator = validator;
     this.authorRepository = authorsRepository;
+    this.bookRepository = bookRepository;
+    this.commentRepository = commentRepository;
   }
 
   public Mono<ServerResponse> create(final ServerRequest request) {
@@ -60,6 +70,7 @@ public class AuthorHandler {
     return request.bodyToMono(Author.class)
                   .doOnNext(this::checkAuthor)
                   .flatMap(authorRepository::save)
+                  .doOnNext(this::afterAuthorUpdate)
                   .flatMap(author -> noContent().build())
                   .onErrorResume(BadRequestException.class,
                                  error -> badRequest()
@@ -69,7 +80,9 @@ public class AuthorHandler {
   }
 
   public Mono<ServerResponse> delete(final ServerRequest request) {
-    return authorRepository.deleteById(request.pathVariable("id"))
+    String authorId = request.pathVariable("id");
+    return authorRepository.deleteById(authorId)
+                           .then(afterAuthorDelete(authorId))
                            .then(noContent().build());
   }
 
@@ -77,5 +90,18 @@ public class AuthorHandler {
     if (validator.validate(author).hasErrors()) {
       throw new BadRequestException("invalid author fields!");
     }
+  }
+
+  private void afterAuthorUpdate(final Author author) {
+    bookRepository.findAllByAuthor_Id(author.getId())
+                  .doOnNext(book -> book.setAuthor(author))
+                  .collectList()
+                  .doOnNext(bookRepository::saveAll)
+                  .subscribe();
+  }
+
+  private Mono<Void> afterAuthorDelete(String authorId) {
+    return commentRepository.deleteAllByBook_Author_Id(authorId)
+                            .then(bookRepository.deleteAllByAuthor_Id(authorId));
   }
 }

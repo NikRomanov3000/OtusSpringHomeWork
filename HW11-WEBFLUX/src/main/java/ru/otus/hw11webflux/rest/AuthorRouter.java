@@ -13,14 +13,18 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
 import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.handler.AuthorHandler;
 import ru.otus.hw11webflux.repository.AuthorRepository;
+import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
 @Configuration
 public class AuthorRouter {
   @Bean
   public RouterFunction<ServerResponse> authorsRoute(final FieldValidator validator,
-      final AuthorRepository authorRepository) {
-    final var handler = new AuthorHandler(validator, authorRepository);
+      final AuthorRepository authorRepository, final BookRepository bookRepository,
+      final CommentRepository commentRepository) {
+    final var handler = new AuthorHandler(validator, authorRepository, bookRepository,
+                                          commentRepository);
 
     return route()
         .POST("/api/author/", accept(APPLICATION_JSON), handler::create)

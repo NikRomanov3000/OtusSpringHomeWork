@@ -14,6 +14,7 @@ import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.handler.BookHandler;
 import ru.otus.hw11webflux.repository.AuthorRepository;
 import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.repository.GenreRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
@@ -23,8 +24,10 @@ public class BookRouter {
   public RouterFunction<ServerResponse> booksRoute(final FieldValidator validator,
       final BookRepository bookRepository,
       final AuthorRepository authorRepository,
-      final GenreRepository genreRepository) {
-    final var handler = new BookHandler(validator, bookRepository, authorRepository, genreRepository);
+      final GenreRepository genreRepository,
+      final CommentRepository commentRepository) {
+    final var handler = new BookHandler(validator, bookRepository, authorRepository, genreRepository,
+                                        commentRepository);
 
     return route()
         .POST("/api/book/", accept(APPLICATION_JSON), handler::create)

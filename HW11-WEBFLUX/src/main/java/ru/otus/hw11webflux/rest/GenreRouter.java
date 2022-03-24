@@ -12,6 +12,8 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.handler.GenreHandler;
+import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.repository.GenreRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
@@ -19,9 +21,10 @@ import ru.otus.hw11webflux.validator.FieldValidator;
 public class GenreRouter {
   @Bean
   public RouterFunction<ServerResponse> genresRoute(final FieldValidator validator,
-      final GenreRepository genresRepository) {
-    final var handler = new GenreHandler(validator, genresRepository);
-
+      final GenreRepository genresRepository, final BookRepository bookRepository,
+      final CommentRepository commentRepository) {
+    final var handler = new GenreHandler(validator, genresRepository, bookRepository,
+                                         commentRepository);
     return route()
         .POST("/api/genre/", accept(APPLICATION_JSON), handler::create)
         .GET("/api/genre/", accept(APPLICATION_JSON), handler::getAll)

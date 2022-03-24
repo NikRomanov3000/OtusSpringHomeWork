@@ -11,6 +11,8 @@ import ru.otus.hw11webflux.model.Comment;
 public interface CommentRepository extends ReactiveMongoRepository<Comment, String> {
   Mono<Void> deleteAllByBook_Id(String bookId);
 
+  Mono<Void> deleteAllByBook_Author_Id(String id);
+
   Mono<Void> deleteAllByBook_Genre_Id(String genreId);
 
   Flux<Comment> findAllByBook_Id(String id);

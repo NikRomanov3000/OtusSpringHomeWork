@@ -1,5 +1,7 @@
 package ru.otus.hw11webflux.handler;
 
+import org.springframework.data.mongodb.core.mapping.event.AfterDeleteEvent;
+import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -16,6 +18,7 @@ import ru.otus.hw11webflux.exception.model.ErrorResponse;
 import ru.otus.hw11webflux.model.Book;
 import ru.otus.hw11webflux.repository.AuthorRepository;
 import ru.otus.hw11webflux.repository.BookRepository;
+import ru.otus.hw11webflux.repository.CommentRepository;
 import ru.otus.hw11webflux.repository.GenreRepository;
 import ru.otus.hw11webflux.validator.FieldValidator;
 
@@ -24,15 +27,18 @@ public class BookHandler {
   private final BookRepository bookRepository;
   private final AuthorRepository authorRepository;
   private final GenreRepository genreRepository;
+  private final CommentRepository commentRepository;
 
   public BookHandler(final FieldValidator validator,
       final BookRepository bookRepository,
       final AuthorRepository authorRepository,
-      final GenreRepository genreRepository) {
+      final GenreRepository genreRepository,
+      CommentRepository commentRepository) {
     this.validator = validator;
     this.bookRepository = bookRepository;
     this.authorRepository = authorRepository;
     this.genreRepository = genreRepository;
+    this.commentRepository = commentRepository;
   }
 
   public Mono<ServerResponse> create(final ServerRequest request) {
@@ -66,6 +72,7 @@ public class BookHandler {
     return request.bodyToMono(Book.class)
                   .doOnNext(this::checkBook)
                   .flatMap(bookRepository::save)
+                  .doOnNext(this::onAfterSave)
                   .flatMap(author -> noContent().build())
                   .onErrorResume(BadRequestException.class,
                                  error -> badRequest()
@@ -76,7 +83,9 @@ public class BookHandler {
   }
 
   public Mono<ServerResponse> delete(final ServerRequest request) {
-    return bookRepository.deleteById(request.pathVariable("id"))
+    String bookId = request.pathVariable("id");
+    return bookRepository.deleteById(bookId)
+                         .then(onAfterDelete(bookId))
                          .then(noContent().build());
   }
 
@@ -98,6 +107,16 @@ public class BookHandler {
     if (validator.validate(book).hasErrors()) {
       throw new BadRequestException("invalid book fields!");
     }
+  }
+
+  public Mono<Void> onAfterDelete(String bookId) {
+    return commentRepository.deleteAllByBook_Id(bookId);
+  }
+
+  public void onAfterSave(Book book) {
+    commentRepository.findAllByBook_Id(book.getId()).doOnNext(
+        comment -> comment.setBook(book)).collectList().doOnNext(
+        commentRepository::saveAll).subscribe();
   }
 }
 
