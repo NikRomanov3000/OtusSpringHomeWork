@@ -42,7 +42,7 @@ public class AuthorHandler {
     return request.bodyToMono(Author.class)
                   .doOnNext(this::checkAuthor)
                   .flatMap(authorRepository::save)
-                  .flatMap(author -> created(request.uri()).contentType(APPLICATION_JSON).bodyValue(new Author(author)))
+                  .flatMap(author -> created(request.uri()).contentType(APPLICATION_JSON).bodyValue(author))
                   .onErrorResume(BadRequestException.class,
                                  error -> badRequest()
                                      .contentType(APPLICATION_JSON)
@@ -62,7 +62,7 @@ public class AuthorHandler {
 
   public Mono<ServerResponse> getById(final ServerRequest request) {
     return authorRepository.findById(request.pathVariable("id"))
-                           .flatMap(author -> ok().contentType(APPLICATION_JSON).bodyValue(new Author(author)))
+                           .flatMap(author -> ok().contentType(APPLICATION_JSON).bodyValue(author))
                            .switchIfEmpty(notFound().build());
   }
 
