@@ -16,7 +16,8 @@ public class PageRouter {
 	@Bean
 	public RouterFunction<ServerResponse> libraryPageRoute() {
 		return route()
-				.GET("/library", accept(TEXT_HTML), request -> ok().contentType(TEXT_HTML).render("library"))
+				.GET("/library", accept(TEXT_HTML),
+						 request -> ok().contentType(TEXT_HTML).render("library"))
 				.build();
 	}
 }

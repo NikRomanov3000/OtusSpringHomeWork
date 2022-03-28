@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import com.mongodb.reactivestreams.client.MongoDatabase;
+import com.mongodb.client.MongoDatabase;
 
 import ru.otus.hw11webflux.model.Author;
 import ru.otus.hw11webflux.model.Book;
@@ -18,13 +18,13 @@ import ru.otus.hw11webflux.repository.GenreRepository;
 @ChangeLog(order = "001")
 public class DatabaseChangelog {
   @ChangeSet(order = "000", id = "dropDb", author = "n.romanov", runAlways = true)
-  public void dropDb(MongoDatabase db) {
+  public void dropDb(final MongoDatabase db) {
     db.drop();
   }
 
   @ChangeSet(order = "001", id = "insertData", author = "n.romanov")
-  public void insertData(AuthorRepository authorRepository, GenreRepository genreRepository,
-      BookRepository bookRepository, CommentRepository commentRepository) {
+  public void insertData(final AuthorRepository authorRepository, final GenreRepository genreRepository,
+      final BookRepository bookRepository, final CommentRepository commentRepository) {
     Author authorOne = authorRepository.save(
         new Author("Alexander Pushkin", "best russian poet")).block();
     Author authorTwo = authorRepository.save(

@@ -7,11 +7,12 @@ spring:
   data:
     mongodb:
       database: library
+      host: localhost
   webflux:
     base-path: /
-
+logging:
+  level:
+    root: debug
 mongock:
-  #runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.otus.hw11webflux.changelog

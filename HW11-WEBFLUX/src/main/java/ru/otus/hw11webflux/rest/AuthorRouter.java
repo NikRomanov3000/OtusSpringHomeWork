@@ -34,7 +34,8 @@ public class AuthorRouter {
         .DELETE("/api/author/{id}", accept(APPLICATION_JSON), handler::delete)
         .onError(RuntimeException.class,
                  (error, request) -> status(INTERNAL_SERVER_ERROR)
-                     .bodyValue(new ErrorResponse(INTERNAL_SERVER_ERROR.value(), error.getMessage()))
+                     .bodyValue(
+                         new ErrorResponse(INTERNAL_SERVER_ERROR.value(), error.getMessage()))
         )
         .build();
   }

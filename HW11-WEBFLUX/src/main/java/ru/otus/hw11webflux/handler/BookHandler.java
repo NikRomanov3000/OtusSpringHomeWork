@@ -12,10 +12,14 @@ import static org.springframework.web.reactive.function.server.ServerResponse.cr
 import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Mono;
 import ru.otus.hw11webflux.exception.BadRequestException;
 import ru.otus.hw11webflux.exception.model.ErrorResponse;
+import ru.otus.hw11webflux.model.Author;
 import ru.otus.hw11webflux.model.Book;
+import ru.otus.hw11webflux.model.BookRequest;
+import ru.otus.hw11webflux.model.Genre;
 import ru.otus.hw11webflux.repository.AuthorRepository;
 import ru.otus.hw11webflux.repository.BookRepository;
 import ru.otus.hw11webflux.repository.CommentRepository;
@@ -42,7 +46,7 @@ public class BookHandler {
   }
 
   public Mono<ServerResponse> create(final ServerRequest request) {
-    return request.bodyToMono(Book.class)
+    return request.bodyToMono(BookRequest.class)
                   .flatMap(this::buildBook)
                   .doOnNext(this::checkBook)
                   .flatMap(bookRepository::save)
@@ -89,18 +93,16 @@ public class BookHandler {
                          .then(noContent().build());
   }
 
-  private Mono<Book> buildBook(final Book book) {
-    final var authorId = book.getAuthorId();
-    final var genreId = book.getGenreId();
+  private Mono<Book> buildBook(final BookRequest book) {
+    Book bookEntity = new Book(book.getTitle(), book.getAnnotation(), null, null);
+    authorRepository.findById(book.getAuthorId()).doOnNext(author -> {
+      bookEntity.setAuthor(author);
+    }).subscribe();
+    genreRepository.findById(book.getGenreId()).doOnNext(genre -> {
+      bookEntity.setGenre(genre);
+    }).subscribe();
 
-    return authorRepository.findById(authorId)
-                           .zipWith(genreRepository.findById(genreId))
-                           .map(tuple -> {
-                             var author = tuple.getT1();
-                             var genre = tuple.getT2();
-
-                             return new Book(book.getTitle(), book.getAnnotation(), author, genre);
-                           });
+    return Mono.just(bookEntity);
   }
 
   private void checkBook(final Book book) {
@@ -116,7 +118,7 @@ public class BookHandler {
   public void onAfterSave(Book book) {
     commentRepository.findAllByBook_Id(book.getId()).doOnNext(
         comment -> comment.setBook(book)).collectList().doOnNext(
-        commentRepository::saveAll).subscribe();
+        commentRepository::saveAll);
   }
 }
 

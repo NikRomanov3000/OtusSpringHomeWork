@@ -15,11 +15,6 @@ public class Book {
   private Author author;
   private Genre genre;
 
-  public Book(String title, String annotation) {
-    this.title = title;
-    this.annotation = annotation;
-  }
-
   public Book(String title, String annotation, Author author, Genre genre) {
     this.title = title;
     this.annotation = annotation;
@@ -27,17 +22,7 @@ public class Book {
     this.genre = genre;
   }
 
-  public Book(String title, String annotation, String authorId, String genreId) {
-    this.title = title;
-    this.annotation = annotation;
-    this.author = new Author();
-    this.genre = new Genre();
-    author.setId(authorId);
-    genre.setId(genreId);
-  }
-
-  public Book(String id, String title, String annotation, Author author,
-      Genre genre) {
+  public Book(String id, String title, String annotation, Author author, Genre genre) {
     this.id = id;
     this.title = title;
     this.annotation = annotation;

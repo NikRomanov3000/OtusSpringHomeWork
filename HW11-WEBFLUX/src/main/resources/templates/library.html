@@ -25,182 +25,170 @@
         }
     </style>
     <script th:inline="javascript">
-      const path =  /*[[${springRequestContext.getContextPath()}]]*/ '/';
+        const path =  /*[[${springRequestContext.getContextPath()}]]*/ '/';
     </script>
 </head>
 <body>
-    <main class="container">
-        <h1>CRUD for book</h1>
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active"
-                   id="create-book-tab"
-                   data-toggle="pill"
-                   href="#create-book"
-                   role="tab"
-                   aria-controls="create-book"
-                   aria-selected="true">
-                    Create book
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link"
-                   id="read-book-tab"
-                   data-toggle="pill"
-                   href="#read-book"
-                   role="tab"
-                   aria-controls="read-book"
-                   aria-selected="false">
-                    Read book
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link"
-                   id="update-book-tab"
-                   data-toggle="pill"
-                   href="#update-book"
-                   role="tab"
-                   aria-controls="update-book"
-                   aria-selected="false">
-                    Update book
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link"
-                   id="delete-book-tab"
-                   data-toggle="pill"
-                   href="#delete-book"
-                   role="tab"
-                   aria-controls="delete-book"
-                   aria-selected="false">
-                    Delete book
-                </a>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active"
-                 id="create-book"
-                 role="tabpanel"
-                 aria-labelledby="create-book-tab">
-                <h2>Create book</h2>
-                <section>
-                    <label for="book-name">Name:</label>
-                    <div class="input-group mb-3">
-                        <input type="text"
-                               class="form-control"
-                               id="book-name"
-                               th:maxlength="255"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="book-publication-date">Publication date:</label>
-                    <div class="input-group mb-3">
-                        <input type="date"
-                               class="form-control"
-                               id="book-publication-date"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="book-print-length">Print length:</label>
-                    <div class="input-group mb-3">
-                        <input type="number"
-                               class="form-control"
-                               id="book-print-length"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="author">Author:</label>
-                    <div class="input-group mb-3">
-                        <select id="author" class="custom-select custom-select-sm"></select>
-                    </div>
-                    <label for="genre">Genre:</label>
-                    <div class="input-group mb-3">
-                        <select id="genre" class="custom-select custom-select-sm"></select>
-                    </div>
-                    <div class="alert-container"></div>
-                    <button type="button" class="btn btn-primary btn-sm">Create</button>
-                </section>
-            </div>
-            <div class="tab-pane fade"
-                 id="read-book"
-                 role="tabpanel"
-                 aria-labelledby="read-book-tab">
-                <h2>Read book</h2>
-                <section>
-                    <label for="book-id-for-read">Book id:</label>
-                    <div class="input-group mb-3">
-                        <input type="text"
-                               class="form-control"
-                               id="book-id-for-read"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div class="alert-container"></div>
-                    <button data-type="getById" type="button" class="btn btn-primary btn-sm">Get by id</button>
-                    <button data-type="getAll" type="button" class="btn btn-primary btn-sm">Get all</button>
-                </section>
-            </div>
-            <div class="tab-pane fade"
-                 id="update-book"
-                 role="tabpanel"
-                 aria-labelledby="update-book-tab">
-                <h2>Update book</h2>
-                <section>
-                    <label for="book-id-for-update">Book id:</label>
-                    <div class="input-group mb-3">
-                        <input type="text"
-                               class="form-control"
-                               id="book-id-for-update"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="book-name-for-update">Name:</label>
-                    <div class="input-group mb-3">
-                        <input type="text"
-                               class="form-control"
-                               id="book-name-for-update"
-                               th:maxlength="255"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="book-publication-date-for-update">Publication date:</label>
-                    <div class="input-group mb-3">
-                        <input type="date"
-                               class="form-control"
-                               id="book-publication-date-for-update"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="book-print-length-for-update">Print length:</label>
-                    <div class="input-group mb-3">
-                        <input type="number"
-                               class="form-control"
-                               id="book-print-length-for-update"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <label for="author-for-update">Author:</label>
-                    <div class="input-group mb-3">
-                        <select id="author-for-update" class="custom-select custom-select-sm"></select>
-                    </div>
-                    <label for="genre-for-update">Genre:</label>
-                    <div class="input-group mb-3">
-                        <select id="genre-for-update" class="custom-select custom-select-sm"></select>
-                    </div>
-                    <div class="alert-container"></div>
-                    <button type="button" class="btn btn-primary btn-sm">Update</button>
-                </section>
-            </div>
-            <div class="tab-pane fade"
-                 id="delete-book"
-                 role="tabpanel"
-                 aria-labelledby="delete-book-tab">
-                <h2>Delete book</h2>
-                <section>
-                    <label for="book-id-for-delete">Book id:</label>
-                    <div class="input-group mb-3">
-                        <input type="text"
-                               class="form-control"
-                               id="book-id-for-delete"
-                               aria-describedby="inputGroup-sizing-default">
-                    </div>
-                    <div class="alert-container"></div>
-                    <button type="button" class="btn btn-primary btn-sm">Delete</button>
-                </section>
-            </div>
+<main class="container">
+    <h1>CRUD for book</h1>
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active"
+               id="create-book-tab"
+               data-toggle="pill"
+               href="#create-book"
+               role="tab"
+               aria-controls="create-book"
+               aria-selected="true">
+                Create book
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="read-book-tab"
+               data-toggle="pill"
+               href="#read-book"
+               role="tab"
+               aria-controls="read-book"
+               aria-selected="false">
+                Read book
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="update-book-tab"
+               data-toggle="pill"
+               href="#update-book"
+               role="tab"
+               aria-controls="update-book"
+               aria-selected="false">
+                Update book
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link"
+               id="delete-book-tab"
+               data-toggle="pill"
+               href="#delete-book"
+               role="tab"
+               aria-controls="delete-book"
+               aria-selected="false">
+                Delete book
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active"
+             id="create-book"
+             role="tabpanel"
+             aria-labelledby="create-book-tab">
+            <h2>Create book</h2>
+            <section>
+                <label for="book-title">Title:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-title"
+                           th:maxlength="255"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <label for="book-annotation">Annotation:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-annotation"
+                           th:maxlength="255"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <label for="author">Author:</label>
+                <div class="input-group mb-3">
+                    <select id="author" class="custom-select custom-select-sm"></select>
+                </div>
+                <label for="genre">Genre:</label>
+                <div class="input-group mb-3">
+                    <select id="genre" class="custom-select custom-select-sm"></select>
+                </div>
+                <div class="alert-container"></div>
+                <button type="button" class="btn btn-primary btn-sm">Create</button>
+            </section>
         </div>
-    </main>
+        <div class="tab-pane fade"
+             id="read-book"
+             role="tabpanel"
+             aria-labelledby="read-book-tab">
+            <h2>Read book</h2>
+            <section>
+                <label for="book-id-for-read">Book id:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-id-for-read"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="alert-container"></div>
+                <button data-type="getById" type="button" class="btn btn-primary btn-sm">Get by id</button>
+                <button data-type="getAll" type="button" class="btn btn-primary btn-sm">Get all</button>
+            </section>
+        </div>
+        <div class="tab-pane fade"
+             id="update-book"
+             role="tabpanel"
+             aria-labelledby="update-book-tab">
+            <h2>Update book</h2>
+            <section>
+                <label for="book-id-for-update">Book id:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-id-for-update"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <label for="book-title-for-update">Name:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-title-for-update"
+                           th:maxlength="255"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <label for="book-annotation-for-update">Annotation:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-annotation-for-update"
+                           th:maxlength="255"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <label for="author-for-update">Author:</label>
+                <div class="input-group mb-3">
+                    <select id="author-for-update" class="custom-select custom-select-sm"></select>
+                </div>
+                <label for="genre-for-update">Genre:</label>
+                <div class="input-group mb-3">
+                    <select id="genre-for-update" class="custom-select custom-select-sm"></select>
+                </div>
+                <div class="alert-container"></div>
+                <button type="button" class="btn btn-primary btn-sm">Update</button>
+            </section>
+        </div>
+        <div class="tab-pane fade"
+             id="delete-book"
+             role="tabpanel"
+             aria-labelledby="delete-book-tab">
+            <h2>Delete book</h2>
+            <section>
+                <label for="book-id-for-delete">Book id:</label>
+                <div class="input-group mb-3">
+                    <input type="text"
+                           class="form-control"
+                           id="book-id-for-delete"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="alert-container"></div>
+                <button type="button" class="btn btn-primary btn-sm">Delete</button>
+            </section>
+        </div>
+    </div>
+</main>
 </body>
 </html>

@@ -73,8 +73,7 @@ public class CommentHandler {
   }
 
   public Mono<ServerResponse> delete(final ServerRequest request) {
-    return commentRepository.deleteById(request.pathVariable("id"))
-                            .then(noContent().build());
+    return commentRepository.deleteById(request.pathVariable("id")).then(noContent().build());
   }
 
   private Mono<Comment> buildComment(final Comment comment) {
