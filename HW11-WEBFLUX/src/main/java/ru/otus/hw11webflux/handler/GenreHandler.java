@@ -101,7 +101,6 @@ public class GenreHandler {
     bookRepository.findAllByGenre_Id(genre.getId())
                   .doOnNext(book -> book.setGenre(genre))
                   .collectList()
-                  .doOnNext(bookRepository::saveAll)
-                  .subscribe();
+                  .doOnNext(bookRepository::saveAll);
   }
 }

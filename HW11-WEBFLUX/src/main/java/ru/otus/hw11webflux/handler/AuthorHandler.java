@@ -96,8 +96,7 @@ public class AuthorHandler {
     bookRepository.findAllByAuthor_Id(author.getId())
                   .doOnNext(book -> book.setAuthor(author))
                   .collectList()
-                  .doOnNext(bookRepository::saveAll)
-                  .subscribe();
+                  .doOnNext(bookRepository::saveAll);
   }
 
   private Mono<Void> afterAuthorDelete(String authorId) {
