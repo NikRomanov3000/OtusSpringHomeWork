@@ -1,0 +1,33 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet context="legacy" author="n.romanov" id="insert init data into app_user table">
+        <insert tableName="app_user">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Nikita Romanov"/>
+            <column name="login" value="romanov"/>
+            <!--password: Password@321-->
+            <column name="password" value="$2a$10$sWzH/V7Cinj9E0p1XtgmWOz4jtsmDo7GxirZ1YJm2p4SSzlRTwn.6"/>
+            <column name="r_role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Alexey Shashov"/>
+            <column name="login" value="shashov"/>
+            <!--password: Password@123-->
+            <column name="password" value="$2a$10$N0PglpvyNy9fZifQkR5xDOVoOLHc5g/egoQBGqX30bdPa0crxrj7e"/>
+            <column name="r_role_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Daniil Gladkov"/>
+            <column name="login" value="vodichesky"/>
+            <!--password: H20@KOT-->
+            <column name="password" value="$2a$10$.NIQ6Ngn6o56I9x3E9AsWOvQQRzyYOf0MH2/Vbnu5d8C2absKTuTK"/>
+            <column name="r_role_id" valueNumeric="3"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

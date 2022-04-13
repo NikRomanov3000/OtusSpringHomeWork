@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all Authors</title>
+    <style type="text/css">
+        body {
+            background-color: dodgerblue;
+            padding: 50px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Authors:</h1>
+<button>
+    <thead>
+        <a th:href="@{/author/addauthor}" href="addauthor.html">Add</a>
+    </thead>
+</button>
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author : ${authors}">
+        <td th:text="${author.id}"></td>
+        <td th:text="${author.name}"></td>
+        <td th:text="${author.comment}"></td>
+        <td>
+            <a th:href="@{author/editauthor(id=${author.id})}" href="editauthor.html">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{author/delauthor(id=${author.id})}" href="delauthor.html">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
