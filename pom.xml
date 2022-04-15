@@ -25,6 +25,7 @@
         <module>HW09-MVC</module>
         <module>HW10-REST</module>
         <module>HW12-SecurityFormBased</module>
+        <module>HW13-ACL</module>
     </modules>
 
     <properties>
