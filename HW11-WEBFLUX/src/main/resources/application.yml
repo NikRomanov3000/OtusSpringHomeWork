@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-circular-references: true
+  data:
+    mongodb:
+      database: library
+      host: localhost
+  webflux:
+    base-path: /
+logging:
+  level:
+    root: debug
+mongock:
+  change-logs-scan-package:
+    - ru.otus.hw11webflux.changelog
