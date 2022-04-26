@@ -15,8 +15,10 @@
         <version>2.6.1</version>
         <relativePath/>
     </parent>
+
     <modules>
         <module>HW1-IoC</module>
+        <module>hw3-boot</module>
         <module>hw4-shell</module>
         <module>HW05-JDBC</module>
         <module>HW06-ORM</module>
@@ -26,6 +28,7 @@
         <module>HW10-REST</module>
         <module>HW12-SecurityFormBased</module>
         <module>HW13-ACL</module>
+        <module>HW14-BATCH</module>
     </modules>
 
     <properties>

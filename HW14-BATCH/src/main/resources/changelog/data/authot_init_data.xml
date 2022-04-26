@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet context="legacy" author="n.romanov" id="insert init data to author table">
+        <insert tableName="author">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Stephen King"/>
+            <column name="comment" value="American author of horror"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Joanne Rowling"/>
+            <column name="comment" value="British author, philanthropist, film producer, television producer, and screenwriter"/>
+        </insert>
+        <insert tableName="author">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Anton Pavlovich Chekhov"/>
+            <column name="comment" value="Russian playwright and short-story writer who is considered to be among the greatest writers of short fiction in history"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
