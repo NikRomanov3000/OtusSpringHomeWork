@@ -1,6 +1,5 @@
 package ru.otus.hw14batch.model.mongo;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -75,12 +74,6 @@ public class MongoBook {
   @Override
   public int hashCode() {
     return Objects.hash(title, annotation);
-  }
-
-  private String getCommentsAsString(List<MongoComment> comments) {
-    StringBuilder sb = new StringBuilder();
-    comments.forEach(comment -> sb.append(comment.getComment() + "; "));
-    return sb.toString();
   }
 
   private String getAuthorName() {

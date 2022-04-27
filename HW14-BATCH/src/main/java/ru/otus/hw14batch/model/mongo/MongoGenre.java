@@ -2,6 +2,7 @@ package ru.otus.hw14batch.model.mongo;
 
 import java.util.Objects;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,12 +21,7 @@ public class MongoGenre {
   private String description;
 
   public MongoGenre(String name, String description) {
-    this.name = name;
-    this.description = description;
-  }
-
-  public MongoGenre(String id, String name, String description) {
-    this.id = id;
+    this.id = new ObjectId().toString();
     this.name = name;
     this.description = description;
   }

@@ -2,6 +2,7 @@ package ru.otus.hw14batch.model.mongo;
 
 import java.util.Objects;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,12 +21,7 @@ public class MongoAuthor {
   private String comment;
 
   public MongoAuthor(String name, String comment) {
-    this.name = name;
-    this.comment = comment;
-  }
-
-  public MongoAuthor(String id, String name, String comment) {
-    this.id = id;
+    this.id = new ObjectId().toString();
     this.name = name;
     this.comment = comment;
   }

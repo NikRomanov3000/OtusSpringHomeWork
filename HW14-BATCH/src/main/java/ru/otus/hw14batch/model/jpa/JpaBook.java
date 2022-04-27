@@ -45,11 +45,6 @@ public class JpaBook {
   @JoinColumn(name = "r_genre_id")
   private JpaGenre jpaGenre;
 
-  @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 5)
-  @OneToMany(targetEntity = JpaComment.class, cascade = CascadeType.ALL, mappedBy = "jpaBook", fetch = FetchType.LAZY)
-  private List<JpaComment> jpaComments;
-
   public JpaBook(String title, String annotation, JpaAuthor jpaAuthor,
       JpaGenre jpaGenre) {
     this.title = title;
@@ -98,12 +93,6 @@ public class JpaBook {
   @Override
   public int hashCode() {
     return Objects.hash(title, annotation);
-  }
-
-  private String getCommentsAsString(List<JpaComment> jpaComments) {
-    StringBuilder sb = new StringBuilder();
-    jpaComments.forEach(jpaComment -> sb.append(jpaComment.getComment() + "; "));
-    return sb.toString();
   }
 
   private String getAuthorName() {

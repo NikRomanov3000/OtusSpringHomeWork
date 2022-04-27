@@ -14,13 +14,13 @@ import ru.otus.hw14batch.configs.JobConfig;
 @ShellComponent
 @RequiredArgsConstructor
 public class ApplicationCommands {
-  private final Job importUserJob;
+  private final Job importBookJob;
   private final JobLauncher jobLauncher;
   private final JobExplorer jobExplorer;
 
   @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
   public void startMigrationJobWithJobLauncher() throws Exception {
-    JobExecution execution = jobLauncher.run(importUserJob, new JobParametersBuilder()
+    JobExecution execution = jobLauncher.run(importBookJob, new JobParametersBuilder()
         .toJobParameters());
     System.out.println(execution);
   }
@@ -28,6 +28,6 @@ public class ApplicationCommands {
   @ShellMethod(value = "showInfo", key = "i")
   public void showInfo() {
     System.out.println(jobExplorer.getJobNames());
-    System.out.println(jobExplorer.getLastJobInstance(JobConfig.IMPORT_USER_JOB_NAME));
+    System.out.println(jobExplorer.getLastJobInstance(JobConfig.IMPORT_BOOK_JOB_NAME));
   }
 }
